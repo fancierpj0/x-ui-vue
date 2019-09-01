@@ -1,0 +1,37 @@
+@import "../var";
+@import '../animation';
+
+$button-font-size:$font-size;
+$button-line-height:$line-height;
+$button-bg: white;
+$button-active-bg: #eee;
+$button-border:$button-border-width solid $border-color;
+$button-border-color-hover:$border-color-hover;
+
+.#{$ui-prefix}button { font-size: $font-size; line-height:$button-line-height; padding: 0.5em 1em;
+  border-radius: $button-border-radius; border: $button-border;
+  background: $button-bg;
+  display: inline-flex; justify-content: center; align-items: center;
+  vertical-align: middle;
+
+  margin:0;
+  color:$color;
+  text-decoration: none;
+
+  //iconPosition:left
+  > .#{$ui-prefix}button-icon { order: 1; margin-right: .1em; }
+  > .#{$ui-prefix}button-content { order: 2; }
+
+  //iconPosition:right
+  &.iconRight {
+    > .#{$ui-prefix}button-icon { order: 2; margin-right: 0; margin-left: .1em;}
+    > .#{$ui-prefix}button-content { order: 1; }
+  }
+
+  &:focus { outline: none; }
+  &:hover { border-color: $button-border-color-hover; }
+  &:active { background-color: $button-active-bg; }
+  .#{$ui-prefix}button-iconLoading {
+    @include spin();
+  }
+}

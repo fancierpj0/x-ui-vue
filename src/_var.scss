@@ -1,0 +1,71 @@
+$ui-prefix:'xui-';
+
+
+$border-radius: 4px;
+
+/* === Color === */
+$red: #F1453D;
+$grey:#eee;
+$blue:#4a90e2;
+
+$border-color: #999;
+$border-color-light: lighten($border-color,30%);
+$border-color-hover: #666;
+
+$box-shadow-color: rgba(0, 0, 0, 0.5);
+
+
+
+
+
+/* === 字体
+
+chrome(pc)最小支持的font-size为12px
+这里选择使用font:14px/1.4286作为基底,line-height计算为20px，很方便
+
+=== */
+$min-font-size:12px;
+$font-size: 14px;
+$line-height: 1.4286;
+$color: #333;
+$light-color:#666;
+$disabled-text-color:#bbb;
+
+
+
+
+
+/* === Button
+
+以下Button 和 ButtonGroup 都会用到
+
+=== */
+$button-border-width:1px;
+$button-border-radius:$border-radius;
+
+
+
+
+
+/* === Nav
+
+=== */
+
+
+
+
+
+
+/* === Grid网格系统 === */
+
+//网格总列数
+$gridColumns: 24 !default;
+
+//触发响应式变化的断点
+$bpList: (
+  phone-:0px,
+  pad-: 576px,
+  narrowPc-: 768px,
+  pc-: 992px,
+  widePc-: 1200px
+) !default;
