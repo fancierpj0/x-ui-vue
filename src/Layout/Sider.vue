@@ -44,9 +44,20 @@
       ,leave(el,done){
         el.style.marginLeft = `-${this.width}`;
 
-        el.addEventListener('transitionend', () => {
-          done(); //调用done 就会马上 display:none 并执行afterLeave
-        });
+        /*
+            调用done 就会马上 display:none 并执行afterLeave
+            ,有些组件可能使用了getBoundingClientRect
+            ,在display:none时候就获取不到
+            ,比如Scroll组件
+            ,如果我们display：none掉了
+            ,然后改变窗口大小
+            ,那么组件里的resize handler里 getBoundingClientRect就会报错
+            ,导致组件运行失败
+            ,故选择不调用done()
+          */
+        /*el.addEventListener('transitionend', () => {
+          done();
+        });*/
       }
     }
   }

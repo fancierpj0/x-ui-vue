@@ -1,5 +1,6 @@
 <!--
 TODO 响应式
+TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
 -->
 <template>
   <div :class="scrollWrapperClass"
