@@ -14,6 +14,7 @@
 
 <script>
   import {UI_PREFIX} from "../constant";
+let i = 0;
 
   export default {
     name: "Toast"
@@ -22,6 +23,7 @@
       autoClose: {type: [Boolean,Number], default: 5000,validator(value){return value === false || typeof value === 'number';}}
       , closeButton: {type: Object, default: () => ({text: '关闭', callback: () => {}})}
       , position: {type: String, default: 'top', validator(value) {return ['top', 'bottom', 'middle'].indexOf(value) >= 0;}}
+      ,createdByPlugin:{type:Boolean,default:false}
       , autoWidth:{type:Boolean,default:false}
     }
     ,data(){
@@ -30,7 +32,7 @@
       }
     }
     ,computed:{
-      toastWrapperClass(){return `${UI_PREFIX}toastWrapper position-${this.position}`;}
+      toastWrapperClass(){return [`${UI_PREFIX}toastWrapper position-${this.position}`,{autoWidth: this.autoWidth}];}
       ,toastClass(){return [`${UI_PREFIX}toastWrapper-toast`,{autoWidth: this.autoWidth}];}
       ,messageClass(){return `${UI_PREFIX}toastWrapper-toast-message`;}
       ,lineClass(){return `${UI_PREFIX}toastWrapper-toast-line`;}
@@ -39,15 +41,22 @@
     , mounted() {
       this.updateStyles();
       this.execAutoClose();
+      !this.createdByPlugin && (this.container || document.body).appendChild(this.$el); // ma...其实plugin里也可以不用append，直接统一在这里append
     }
     , methods: {
       updateStyles() {
-        //在我们将toast的height改为min-height时，竖线的height 100%就失效了，我们需要用js来设置
+        /*
+            在我们将toast的height改为min-height时，竖线的height 100%就失效了
+            ，并且absolute虽然能解决高度问题，但是位置又存在问题
+            ，SO我们需要用js来设置
+        */
 
-        //因为我们是现在plugin中先$mount()的，故mounted时，还没有真正插入页面，也就没css
-        this.$nextTick(() => {
+        //当我们是现在plugin中先$mount()的，生命周期mounted触发，但此时还没有真正插入页面，也就没css，就会报错
+        setTimeout(() => {
+          console.log('this.$refs.line:',this.$refs.line);
+          console.log(++i);
           this.$refs.line.style.height = `${this.$refs.toast.getBoundingClientRect().height}px`;
-        });
+        },0);
       }
       ,execAutoClose() {
         if (this.autoClose) setTimeout(() => {this.close();}, this.autoClose);
@@ -101,6 +110,10 @@
         position: fixed;
         left: 50%;
         transform: translateX(-50%);
+        width:100%;
+        &.autoWidth{
+            width:auto;
+        }
 
         &.position-top {
             top: 0;
@@ -131,7 +144,7 @@
             align-items: center;
 
             box-sizing:border-box;
-            width:100vw;
+            width:100%;
 
             font-size: $toast-font-size;
             line-height: $toast-line-height;

@@ -1,5 +1,6 @@
 <template>
   <div :class="popoverClass" ref="popover">
+
     <div
       ref="contentWrapper"
       :class="popoverContentWrapperClass"
@@ -7,9 +8,11 @@
     >
       <slot name="content" :close="close"></slot>
     </div>
+
     <span ref="triggerWrapper" style="display: inline-block;">
       <slot></slot>
     </span>
+
   </div>
 </template>
 

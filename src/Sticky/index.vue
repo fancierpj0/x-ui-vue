@@ -48,14 +48,9 @@
     }
     ,methods:{
       //↓元素距离滚动文档顶部的高度
-      //TODO 不能再mounted时候获取，如果非要在mounted中获取css，特别是通过getBoundingClientRect获取，需要setTimeout(this.$nextTick不管用)
+      //TODO 不能在mounted时候获取，如果非要在mounted中获取css，特别是通过getBoundingClientRect获取，需要setTimeout(this.$nextTick不管用)
       offsetTop () {
-        console.log(this.$refs.wrapper);
-        console.log(this.$refs.wrapper.getBoundingClientRect());
         let {top} = this.$refs.wrapper.getBoundingClientRect();
-        console.log('top:',top);
-        console.log('window.scrollY:',window.scrollY);
-        console.log('offsetTop', top + window.scrollY);
         return top + window.scrollY;
       }
       ,_windowScrollHandler() {

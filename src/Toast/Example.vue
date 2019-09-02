@@ -4,7 +4,7 @@
         <div style="height:1em;background: #4a90e2;"></div>
 
         <hr>
-        <div>
+        <!--<div>
             <p>
                 默认行为:
                 1.自动关闭，可设置是否取消(false，boolean值)以及调整持续时间(数字，单位为秒)
@@ -18,29 +18,29 @@
                     Toast测试000001 <br>
                 </Toast>
             </div>
-        </div>
+        </div>-->
 
         <hr>
-        <div>
+        <!--<div>
             <p>支持三个position，top、bottom、middle</p>
             <div>
                 <Toast position="bottom"  @close="handleCloseEmit">position:bottom</Toast>
             </div>
-        </div>
+        </div>-->
 
         <hr>
-        <div>
+        <!--<div>
             <p>close-button接受一个参数，可设置button的文本显示和点击关闭后触发的回调，和触发的`emit`事件不同的是，此回调在Toast真正执行之前执行</p>
             <div>
                 <Toast :close-button="{text:'自定义关闭按钮的文本',callback}" position="middle" :auto-close="false">
                     <Button icon="success" @click="handleClick" icon-position="right">按钮</Button>
                 </Toast>
             </div>
-        </div>
+        </div>-->
 
         <p>可通过注册插件的方式，以this.$toast(message/jsx,optionsObj)来呼出toast；这种方式是单例的，意味着同时只能呼出一个toast</p>
-
         <p>可设置`widthAuto=true`，让toast自适应内容宽度</p>
+
     </div>
 </template>
 
@@ -62,7 +62,7 @@
     }
     ,mounted() {
       this.$toast(<div style="background:pink;width:100px;height:100px;">这是通过this.$toast()呼出的toast1</div>,{position:'bottom',autoClose:false,autoWidth:true});
-      this.$toast(<div style="background:pink;width:100px;height:100px;">这是通过this.$toast()呼出的toast2</div>,{position:'bottom',autoClose:false,autoWidth:true});
+      this.$toast(<div style="background:pink;width:100px;height:100px;">这是通过this.$toast()呼出的toast2</div>,{position:'top',autoClose:false,autoWidth:false});
     }
     ,methods:{
       callback(x){

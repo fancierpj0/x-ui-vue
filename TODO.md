@@ -5,3 +5,9 @@
 + 组件name加不加前缀
 
 + 以`this.$toast()`的方式反复呼出toast，会报`Error in nextTick: "TypeError: Cannot read property 'style' of undefined"`，但并不影响使用
+
+
+toast
+popover
+Sticky
+Cascader
