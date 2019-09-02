@@ -6,7 +6,7 @@
             <p></p>
             <div>
                 <div >
-                    <Sticky :distance="100">
+                    <Sticky :distance="30" is-custom-scroll>
                         <div style="border:1px solid red;"><img src="../b.jpg" height="100"></div>
                     </Sticky>
                 </div>

@@ -9,3 +9,5 @@
 
 
 Sticky
+
+重构 eventBus命名

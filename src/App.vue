@@ -99,6 +99,10 @@
       <Footer class="page-wrapper-footer">&copy;Code and Designed By Cris</Footer>
     </Layout>
   </div>
+
+  <!--<div id="app">
+    <StickyExample></StickyExample>
+  </div>-->
 </template>
 
 <script>
@@ -113,9 +117,10 @@
   import Button from './Button';
   import Scroll from './Scroll';
   import Popover from './Popover';
+  import StickyExample from './Sticky/Example';
   export default {
     name:'App'
-    ,components:{Layout,Header,Footer,Content,Sider,Nav,NavItem,SubNav,Button,Scroll,Popover}
+    ,components:{Layout,Header,Footer,Content,Sider,Nav,NavItem,SubNav,Button,Scroll,Popover,StickyExample}
     ,data(){
       return {
         navSelected:[]

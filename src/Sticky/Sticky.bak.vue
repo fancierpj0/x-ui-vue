@@ -103,16 +103,14 @@
       }
       ,customScrollHandler(scrollY,x1){
         let {top} = this.$refs.wrapper.getBoundingClientRect();
-        //TODO 记录初始top 从下往上时 比较的是这个
-        if ((top-x1)<this.distance) {
+        if ((x1-top)<this.distance) {
           this.setStyleDataBeforeSticky();
           this.containerTop = x1 + this.distance + 'px';
           // console.log(this.$refs.container);
-          this.sticky = true;
           document.body.appendChild(this.$refs.container);
+          this.sticky = true;
         } else {
-          this.$refs.wrapper.appendChild(this.$refs.container);
-          this.clearStickAndStyleData(); // 为避免影响其它组件元素 先移回 再去掉fixed
+          this.clearStickAndStyleData();
         }
       }
 

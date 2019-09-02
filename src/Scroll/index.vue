@@ -1,6 +1,14 @@
 <!--
-TODO 响应式
 TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
+
+即 scrollBar被隐藏时 若有
+-->
+<!--
+TODO 响应式(因窗口大小改变的响应式已经实现，但因其它因素导致scroll窗口大小改变的响应式还未实现)
+
+onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
+如果不考getBounding的优化
+，可以直接在这四个方法里即时更新containerWrapper的height和top即可完全实现响应式
 -->
 <template>
   <div :class="scrollWrapperClass"
@@ -11,6 +19,7 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
     <div :class="containerWrapperClass" ref="containerWrapper">
       <div :class="containerClass" ref="scrollContainer"
            :style="{transform: `translateY(${this.contentY}px)`}">
+        <!--slot↓↓↓-->
         <slot></slot>
       </div>
     </div>
@@ -47,7 +56,8 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
 </template>
 
 <script>
-  import {UI_PREFIX} from "../constant";
+  import Vue from 'vue';
+  import {UI_PREFIX,SCROLL_EVENTBUS} from "../constant";
   import Icon from '../Icon';
 
   const BUTTON_HEIGHT = 20;
@@ -78,6 +88,12 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
 
         ,timerId_buttonTrigger:undefined
         ,timerId_autoHiddenScrollBar:undefined
+        ,[SCROLL_EVENTBUS]:new Vue()
+      }
+    }
+    ,provide(){
+      return {
+        [SCROLL_EVENTBUS]: this[SCROLL_EVENTBUS]
       }
     }
     ,computed: {
@@ -123,7 +139,6 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
         this.init();
       }, 0);
     }
-
     ,beforeDestroy () {
       // 移除 document 的事件监听
       document.removeEventListener('mousemove', this.onMouseMoveDragger);
@@ -137,6 +152,8 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
         this.containerHeight = this.$refs.scrollContainer.getBoundingClientRect().height;
         //scrollWrapper大小发生改变时
         this.containerWrapperHeight = this.$refs.containerWrapper.getBoundingClientRect().height;
+        //sticky组件依赖↓
+        this.containerWrapperTop = this.$refs.containerWrapper.getBoundingClientRect().top;
 
         this.listenToDocument();
         this.listenToWindowResize();
@@ -152,6 +169,13 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
         } else if (contentY < -contentYmaxHeight) {
           this.contentY = -contentYmaxHeight
         }
+        /*
+          我们只在Scroll外部的img load时更新containerWrapperTop(Sticky组件依赖)
+          ，这存在潜在的隐患
+          ，比如scroll上面有一个可以隐藏的nav什么的
+          ，当其隐藏时，containerWrapperTop还是变了 (containerWrapperHeight的更新也存在这个问题，这会影响dragger相关的样式与行为) TODO
+        */
+        this[SCROLL_EVENTBUS].$emit('update:scrollY', -contentY, this.containerWrapperTop);
       }
       ,updateDraggerY (draggerY) {
         this.draggerY = draggerY;
@@ -287,26 +311,36 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
       /*
         图片加载 或 容器子元素增删或则样式变化 导致大小容器变化
       */
-      ,updateNewContainerHAndContainerH(){
+
+      //↓↓↓这个方法会更新dragger样式以及行为所需要的依赖
+      ,updateContainerHAndDraggerY(){
         /*
-          只更新containerHeight就好
-          ，因为draggerHeight计算属性依赖它
+          无需单独更新draggerHeight
+          ，因为这个计算属性依赖containerHeight
           ，并且该属性直接作为了style样式值，故会自动刷新
         */
         this.containerHeight = this.$refs.scrollContainer.getBoundingClientRect().height;
+
         this.updateDraggerY(this.calculateDraggerYFromContentY());
       }
-      ,addLoadListener(tag){
+      ,addLoadListenerForImg(tag,ifImgOutSideContainer=false){
         tag.setAttribute('data-listened', 'yes');
         tag.addEventListener('load', () => {
-          this.updateNewContainerHAndContainerH();
+          this.updateContainerHAndDraggerY();
+          /*
+            sticky依赖↓
+            如果是scroll外部的图片加载
+            ，可能会影响到containerWrapperTop的值
+            ，需要更新
+          */
+          if(ifImgOutSideContainer) this.containerWrapperTop = this.$refs.containerWrapper.getBoundingClientRect().top;
         });
       }
       ,listenToRemoteResources () {
         let tags = this.$refs.scrollContainer.querySelectorAll('img, video, audio');
         Array.from(tags).map((tag) => {
           if (tag.hasAttribute('data-listened')) return;
-          this.addLoadListener(tag);
+          this.addLoadListenerForImg(tag,true); // 这里的图片只是可能在滚动容器外部，so还能优化..，emmm....
         })
       }
       ,listenToDomChange () {
@@ -321,15 +355,15 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
                 // console.log("A child node has been added or removed.");
                 for(let node of mutation.addedNodes){ // nodeList 可用 of 遍历
                   if (['img', 'video', 'audio'].includes(node.nodeName.toLowerCase())) {
-                    this.addLoadListener(node);
+                    this.addLoadListenerForImg(node);
                   }
                 }
-                this.updateNewContainerHAndContainerH();
+                this.updateContainerHAndDraggerY();
                 break;
               case "attributes":
                 if(mutation.target === this.$refs.scrollContainer) return; // 容器自身滚动依赖行内的transform，变化时不需要做处理
                 // console.log(`The ${mutation.attributeName} attribute was modified.`);
-                this.updateNewContainerHAndContainerH(); // 容器子元素自身属性(css、style)发生改变时 统一更新一下
+                this.updateContainerHAndDraggerY(); // 容器子元素自身属性(css、style)发生改变时 统一更新一下
                 break;
               default:
                 break;
@@ -346,7 +380,7 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
       ,listenToWindowResize(){
         window.addEventListener('resize',() => {
           this.containerWrapperHeight = this.$refs.containerWrapper.getBoundingClientRect().height;
-          this.updateNewContainerHAndContainerH();
+          this.updateContainerHAndDraggerY();
         });
       }
 
@@ -374,6 +408,7 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
       ,onMouseLeaveScrollBar(){
         if(!this.isScrolling) this.autoHiddenScrollBar();
       }
+
 
     }
 
