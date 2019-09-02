@@ -393,7 +393,7 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
     height: 100%;
 
     &-scrollContainerWrapper {
-      position: absolute;
+      position: absolute; // emmm 可以考虑无定位 直接height:100%
       overflow: hidden;
       top: 0;bottom: 0;right: 0;left: 0;
       transition: margin-right 0.3s ease-out;

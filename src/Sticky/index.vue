@@ -54,7 +54,7 @@
         return top + window.scrollY;
       }
       ,_windowScrollHandler() {
-        if (window.scrollY > this.offsetTop() - this.distance) { // 页面滚动距离超过了 offsetTop减去distance的高度
+        if (window.scrollY > this.offsetTop() - this.distance) { // 只要滚动距离超过目标元素距离文档顶部的高度 就说明已经滚过该元素了 当然，有distance的话还要减去distance
           let {height, left, width} = this.$refs.wrapper.getBoundingClientRect(); // 因为可能内部是一张从远程下载的图片，如果一开始就获取，可能图片还没下载好，故我们在可滚动时再获取(一般可滚动时，已经加载完毕)
           this.height = height + 'px';
           this.left = left + 'px';

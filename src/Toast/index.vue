@@ -24,6 +24,7 @@
       , position: {type: String, default: 'top', validator(value) {return ['top', 'bottom', 'middle'].indexOf(value) >= 0;}}
       ,createdByPlugin:{type:Boolean,default:false}
       , autoWidth:{type:Boolean,default:false}
+      ,container: {type: Element}
     }
     ,data(){
       return{
