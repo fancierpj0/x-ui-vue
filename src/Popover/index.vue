@@ -83,20 +83,6 @@ export default {
           , left: left + window.scrollX + width - width2
         }
 
-        //bottom系列 下面的height是getBounding得到的，是包含padding和border的
-        ,leftBottom: {
-          top: top + height + window.scrollY
-          , left: left + window.scrollX
-        }
-        ,bottom: {
-          top: top + height + window.scrollY
-          ,left: left + window.scrollX + (width - width2) / 2
-        }
-        ,rightBottom:{
-          top: top + height + window.scrollY
-          , left: left + window.scrollX + width - width2
-        }
-
         //left系列 css里我们还会使用translateX进行调整
         ,topLeft:{
           top: top + window.scrollY
@@ -123,6 +109,20 @@ export default {
         ,bottomRight:{
           top: top + window.scrollY + height - height2
           ,left: left + window.scrollX + width
+        }
+
+        //bottom系列 下面的height是getBounding得到的，是包含padding和border的
+        ,leftBottom: {
+          top: top + height + window.scrollY
+          , left: left + window.scrollX
+        }
+        ,bottom: {
+          top: top + height + window.scrollY
+          ,left: left + window.scrollX + (width - width2) / 2
+        }
+        ,rightBottom:{
+          top: top + height + window.scrollY
+          , left: left + window.scrollX + width - width2
         }
       };
       contentWrapper.style.left = positions[this.position].left + "px";

@@ -112,9 +112,10 @@
   import SubNav from './Nav/SubNav';
   import Button from './Button';
   import Scroll from './Scroll';
+  import Popover from './Popover';
   export default {
     name:'App'
-    ,components:{Layout,Header,Footer,Content,Sider,Nav,NavItem,SubNav,Button,Scroll}
+    ,components:{Layout,Header,Footer,Content,Sider,Nav,NavItem,SubNav,Button,Scroll,Popover}
     ,data(){
       return {
         navSelected:[]

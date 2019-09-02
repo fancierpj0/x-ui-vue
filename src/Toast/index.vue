@@ -14,7 +14,6 @@
 
 <script>
   import {UI_PREFIX} from "../constant";
-let i = 0;
 
   export default {
     name: "Toast"
@@ -53,8 +52,6 @@ let i = 0;
 
         //当我们是现在plugin中先$mount()的，生命周期mounted触发，但此时还没有真正插入页面，也就没css，就会报错
         setTimeout(() => {
-          console.log('this.$refs.line:',this.$refs.line);
-          console.log(++i);
           this.$refs.line.style.height = `${this.$refs.toast.getBoundingClientRect().height}px`;
         },0);
       }

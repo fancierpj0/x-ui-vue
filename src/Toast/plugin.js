@@ -5,9 +5,7 @@ let currentToast;
 export default {
   install(Vue, options) {
     Vue.prototype.$toast = function (message, toastOptions) {
-      console.log(0);
       if(currentToast) {
-        console.log(1);
         currentToast.close();
       }
       currentToast = createToast({Vue, message, propsData: toastOptions, onClose:()=>{currentToast = null;}});
@@ -21,8 +19,6 @@ function createToast({Vue, message, propsData, onClose}) {
   toast.$slots.default = [message]; //必须数组 必须放mount前
   toast.$on('close', onClose);
   toast.$mount(); // 会执行 beforeMount 及其之后的钩子，包括mounted(因为此时有可能还没有真正插入页面中，so，此时在这里获取css的话可能有问题)
-  console.log(2);
   (propsData.container || document.body).appendChild(toast.$el);
-  console.log(3);
   return toast;
 }

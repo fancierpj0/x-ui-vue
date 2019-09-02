@@ -21,6 +21,7 @@ export default {
     const iconClassName = loading ? `${UI_PREFIX}button-icon ${UI_PREFIX}button-iconLoading` : `${UI_PREFIX}button-icon`;
 
     const iconName = loading ? 'loading' : icon;
+
     return (
       <tagType class={[buttonClassName,preClassName]} {...{attrs}} {...{on:{...on,...nativeOn}}} {...{style}}>
         {icon && <Icon name={iconName} class={iconClassName}></Icon>}
