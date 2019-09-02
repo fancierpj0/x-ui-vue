@@ -399,6 +399,7 @@ TODO 被隐藏时，改变窗口大小，无法getBoundingClientRect
       transition: margin-right 0.3s ease-out;
       &.scrollBarVisible {margin-right: 30px;}
       &-scrollContainer {
+        min-height:100%;
         overflow: hidden; // 防止子元素margin穿透
         transition: $wheel-transition;
       }
