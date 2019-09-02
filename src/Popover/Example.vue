@@ -25,7 +25,7 @@
     <div>
         <p>hover</p>
         <div>
-            <Popover position="rightTop" trigger="hover">
+            <Popover position="leftBottom" trigger="hover">
                 <template v-slot:content="{close}">
                     <!--<div>popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容popover内容</div>-->
                     <div style="width:100px;height:100px;background:orange;">
