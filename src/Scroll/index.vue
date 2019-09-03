@@ -78,6 +78,10 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
         type:[String,Number]
         ,default:2500
       }
+      ,wheelStep:{
+        type:[String,Number]
+        ,default:50
+      }
     }
     ,data () {
       return {
@@ -126,7 +130,7 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
         // ↓这样的话dragger高度计算不出来 emmm.... ???
         // return this.maxContentY > 0;
 
-        if(this.maxContentY <= 0) return false;
+        if(this.maxContentY <= 0) return false; // !不能简化
         return true;
       }
       ,checkScrollBarVisible(){
@@ -144,7 +148,7 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
       ,maxContentY(){return this.containerHeight - this.containerWrapperHeight;}
     }
     ,watch:{
-      scrollBarVisible:function(newValue,oldValue){
+      scrollBarVisible:function(){ //newValue,oldValue
         this[SCROLL_EVENTBUS].$emit('update:scrollContainerWrapper', this.containerWrapperLeft, this.containerWrapperTop);
       }
     }
@@ -292,14 +296,10 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
       }
       ,calculateContentYFromDeltaY (deltaY) {
         let contentY = this.contentY;
-        if (deltaY > 20) { // 向下滚动，contentWrapper 应该向上移动 contentY 不论是translateY 还是 absolute top 数值都应该减小
-          contentY -= 20 * 3
-        } else if (deltaY < -20) {
-          contentY += 20 * 3
-
-        // 上面是对最快滚轮速度导致的滚动速度进行了限制(针对apple),另外windows不论怎样都走上面，因为其deltaY固定+、-100
-        } else {
-          contentY -= deltaY * 3
+        if (deltaY > 0) { // 向下滚动，contentWrapper 应该向上移动 contentY 不论是translateY 还是 absolute top 数值都应该减小
+          contentY -= this.wheelStep
+        } else if (deltaY < 0) {
+          contentY += this.wheelStep
         }
         return contentY
       }
