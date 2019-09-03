@@ -8,7 +8,7 @@
         <Button @click="toggleSider">X</Button>
       </Header>
       <Layout class="page-wrapper-l">
-        <Sider class="page-wrapper-l-sider" :visible="siderVisible" width="200px">
+        <Sider class="page-wrapper-l-sider" :visible="siderVisible" width="200px" :out-cb="updateScrollContainerWrapper" :in-cb="updateScrollContainerWrapper">
           <Scroll>
             <Nav :selected.sync="navSelected" vertical open-all class="page-wrapper-l-sider-nav">
               <nav-item name="installation">安装</nav-item>
@@ -118,6 +118,10 @@
   import Scroll from './Scroll';
   import Popover from './Popover';
   import StickyExample from './Sticky/Example';
+
+  import Vue from 'vue';
+  import {LAYOUT_EVENTBUS} from './constant';
+
   export default {
     name:'App'
     ,components:{Layout,Header,Footer,Content,Sider,Nav,NavItem,SubNav,Button,Scroll,Popover,StickyExample}
@@ -128,6 +132,12 @@
 
         ]
         ,siderVisible:true
+        ,[LAYOUT_EVENTBUS]: new Vue()
+      }
+    }
+    ,provide(){
+      return {
+        [LAYOUT_EVENTBUS]: this[LAYOUT_EVENTBUS]
       }
     }
     ,computed:{
@@ -139,6 +149,9 @@
     ,methods:{
       toggleSider(){
         this.siderVisible = !this.siderVisible;
+      }
+      ,updateScrollContainerWrapper(){
+        this[LAYOUT_EVENTBUS].$emit('update:scrollContainerWrapper');
       }
     }
   }

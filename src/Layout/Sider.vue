@@ -18,6 +18,12 @@
       ,width:{
         type:String
       }
+      ,inCb:{
+        type:Function
+      }
+      ,outCb:{
+        type:Function
+      }
     }
     ,computed:{
       siderClass(){
@@ -38,8 +44,10 @@
         el.style.marginLeft = '0px';
 
         el.addEventListener('transitionend', () => {
+          // console.log('in:transitionend');
+          this.inCb && this.inCb();
           done();//调用done 就会马上执行 afterEnter
-        });
+        },{once:true});
       }
       ,leave(el,done){
         el.style.marginLeft = `-${this.width}`;
@@ -55,9 +63,11 @@
             ,导致组件运行失败
             ,故选择不调用done()
           */
-        /*el.addEventListener('transitionend', () => {
-          done();
-        });*/
+        el.addEventListener('transitionend', () => {
+          // console.log('out:transitionend');
+          this.outCb && this.outCb();
+          // done();
+        },{once:true});
       }
     }
   }
