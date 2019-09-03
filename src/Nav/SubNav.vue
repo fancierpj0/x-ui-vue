@@ -68,7 +68,7 @@ export default {
 
       el.addEventListener('transitionend', () => {
         done();//调用done 就会马上执行 afterEnter
-      });
+      },{once:true});
     }
     ,afterEnter(el){
       el.style.height = 'auto'; //这里设置为auto，是因为有可能el会自动增高(点击内嵌的subNav时)，so如果还是之前人为的固定height，就无法实现展开
@@ -81,7 +81,7 @@ export default {
 
       el.addEventListener('transitionend', () => {
         done(); //调用done 就会马上 display:none 并执行afterLeave
-      });
+      },{once:true});
     }
     ,afterLeave(el){
       // el.style.height = 'auto';

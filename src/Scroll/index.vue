@@ -9,6 +9,8 @@ TODO 响应式(因窗口大小改变的响应式已经实现，但因其它因�
 onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
 如果不考getBounding的优化
 ，可以直接在这四个方法里即时更新containerWrapper的height和top即可完全实现响应式
+，但这样在containerWrapper第一时间改变的时候并没有立即更新(在触发滚动行为的时候才会)
+，so最后决定提供一个更新方法给外部调用 updateScrollByOutSide
 -->
 <template>
   <div :class="scrollWrapperClass"
@@ -57,7 +59,7 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
 
 <script>
   import Vue from 'vue';
-  import {UI_PREFIX,SCROLL_EVENTBUS} from "../constant";
+  import {UI_PREFIX,SCROLL_EVENTBUS,LAYOUT_EVENTBUS} from "../constant";
   import Icon from '../Icon';
 
   const BUTTON_HEIGHT = 20;
@@ -65,6 +67,12 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
   export default {
     name: "Scroll"
     ,components:{Icon}
+    ,inject:{
+      [LAYOUT_EVENTBUS]:{
+        from:LAYOUT_EVENTBUS
+        ,default:null
+      }
+    }
     ,props:{
       scrollBarDuration:{
         type:[String,Number]
@@ -85,6 +93,8 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
 
         ,containerHeight:undefined
         ,containerWrapperHeight:undefined
+        ,containerWrapperTop:undefined
+        ,containerWrapperLeft:undefined
 
         ,timerId_buttonTrigger:undefined
         ,timerId_autoHiddenScrollBar:undefined
@@ -133,6 +143,11 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
       ,maxDraggerY(){return this.draggerRailHeight - this.draggerHeight;}
       ,maxContentY(){return this.containerHeight - this.containerWrapperHeight;}
     }
+    ,watch:{
+      scrollBarVisible:function(newValue,oldValue){
+        this[SCROLL_EVENTBUS].$emit('update:scrollContainerWrapper', this.containerWrapperLeft, this.containerWrapperTop);
+      }
+    }
 
     ,mounted () {
       setTimeout(() => {
@@ -143,22 +158,33 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
       // 移除 document 的事件监听
       document.removeEventListener('mousemove', this.onMouseMoveDragger);
       document.removeEventListener('mouseup', this.onMouseUpDragger);
+      window.removeEventListener('resize', this.updateScrollByOutSide);
     }
 
     ,methods: {
       init(){
 
-        //触发增删子节点、图片懒加载等可以改变容器大小的操作时 需要更新这个
+        //wheel依赖↓
         this.containerHeight = this.$refs.scrollContainer.getBoundingClientRect().height;
-        //scrollWrapper大小发生改变时
-        this.containerWrapperHeight = this.$refs.containerWrapper.getBoundingClientRect().height;
-        //sticky组件依赖↓
-        this.containerWrapperTop = this.$refs.containerWrapper.getBoundingClientRect().top;
+        this.updateScrollContainerWrapper();
+        this[LAYOUT_EVENTBUS].$on('update:scrollContainerWrapper', ()=>{
+          this.updateScrollByOutSide();
+          this[SCROLL_EVENTBUS].$emit('update:scrollContainerWrapper', this.containerWrapperLeft, this.containerWrapperTop);
+        });
 
         this.listenToDocument();
         this.listenToWindowResize();
         this.listenToRemoteResources();
         this.listenToDomChange();
+      }
+
+      ,updateScrollContainerWrapper(){
+        const {height, top, left} = this.$refs.containerWrapper.getBoundingClientRect();
+        //dragger样式、行为依赖containerWrapperHeight
+        this.containerWrapperHeight = height;
+        //sticky组件依赖containerWrapperTop、containerWrapperLeft
+        this.containerWrapperTop = top;
+        this.containerWrapperLeft = left;
       }
 
       ,updateContentY (contentY) {
@@ -175,7 +201,7 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
           ，比如scroll上面有一个可以隐藏的nav什么的
           ，当其隐藏时，containerWrapperTop还是变了 (containerWrapperHeight的更新也存在这个问题，这会影响dragger相关的样式与行为) TODO
         */
-        this[SCROLL_EVENTBUS].$emit('update:scrollY', -contentY, this.containerWrapperTop);
+        this[SCROLL_EVENTBUS].$emit('update:scrollY', -contentY, this.containerWrapperLeft, this.containerWrapperTop);
       }
       ,updateDraggerY (draggerY) {
         this.draggerY = draggerY;
@@ -333,7 +359,11 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
             ，可能会影响到containerWrapperTop的值
             ，需要更新
           */
-          if(ifImgOutSideContainer) this.containerWrapperTop = this.$refs.containerWrapper.getBoundingClientRect().top;
+          if(ifImgOutSideContainer){
+            const {top, left} = this.$refs.containerWrapper.getBoundingClientRect();
+            this.containerWrapperTop = top;
+            this.containerWrapperLeft = left; // 图片加载可能？也会导致left需要更新
+          }
         });
       }
       ,listenToRemoteResources () {
@@ -343,6 +373,7 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
           this.addLoadListenerForImg(tag,true); // 这里的图片只是可能在滚动容器外部，so还能优化..，emmm....
         })
       }
+      //↓都是容器内部的变化 不会影响containerWrapperTop
       ,listenToDomChange () {
         const targetNode = this.$refs.scrollContainer;
         const config = {attributeFilter: ['class','style'], childList: true, subtree: true};
@@ -378,12 +409,14 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
 
       // window窗口大小改变导致容器大小变化
       ,listenToWindowResize(){
-        window.addEventListener('resize',() => {
-          this.containerWrapperHeight = this.$refs.containerWrapper.getBoundingClientRect().height;
-          this.updateContainerHAndDraggerY();
-        });
+        window.addEventListener('resize',this.updateScrollByOutSide);
       }
 
+      // 提供给外部调用的更新方法
+      ,updateScrollByOutSide(){
+        this.updateScrollContainerWrapper();
+        this.updateContainerHAndDraggerY();
+      }
 
 
       /*
