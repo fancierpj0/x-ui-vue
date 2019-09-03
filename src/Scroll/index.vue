@@ -10,7 +10,7 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
 如果不考getBounding的优化
 ，可以直接在这四个方法里即时更新containerWrapper的height和top即可完全实现响应式
 ，但这样在containerWrapper第一时间改变的时候并没有立即更新(在触发滚动行为的时候才会)
-，so最后决定提供一个更新方法给外部调用 updateScrollByOutSide
+，so最后决定通过侦听 注入的LAYOUT_EVENTBUS的update:scrollContainerWrapper事件来更新
 -->
 <template>
   <div :class="scrollWrapperClass"
