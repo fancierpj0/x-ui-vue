@@ -6,8 +6,3 @@
 
 + 以`this.$toast()`的方式反复呼出toast，会报`Error in nextTick: "TypeError: Cannot read property 'style' of undefined"`，但并不影响使用
 
-
-
-Sticky
-
-重构 eventBus命名
