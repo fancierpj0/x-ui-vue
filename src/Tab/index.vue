@@ -44,9 +44,9 @@
     }
     , methods: {
       consoleChildTypeErrorWarnMsg(){
-        console.warn('tab的子组件应该是tab-head和tab-body');
+        console.warn('tab的子组件应该是tab-head或tab-body');
       }
-      ,checkSelectedIfWidthDisabled(tabHeadItems){
+      ,checkSelectedIfWithDisabled(tabHeadItems){
         for(let j=0;j<tabHeadItems.$children.length;++j){
           const tabItem = tabHeadItems.$children[j];
           if (tabItem.$options.name.toLowerCase() === 'tabitem' && tabItem.disabled === true && tabItem.name === this.selected ){
@@ -58,7 +58,7 @@
           const item = this.$children[i];
           const name = item.$options.name.toLowerCase();
           if(['tabhead','tabbody'].indexOf(name)<0) return this.consoleChildTypeErrorWarnMsg();
-          if(name === 'tabhead'){this.checkSelectedIfWidthDisabled(item);}}
+          if(name === 'tabhead'){this.checkSelectedIfWithDisabled(item);}}
       }
       /*
         找到被选中的那个TabItem
