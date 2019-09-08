@@ -15,6 +15,8 @@ import CascaderExample from './Cascader/Example'
 import PagerExample from './Pager/Example'
 import StickyExample from './Sticky/Example'
 import ScrollExample from './Scroll/Example'
+import TableExample from './Table/Example'
+import FormExample from './Form/Example'
 
 
 Vue.use(Router);
@@ -38,5 +40,7 @@ export default new Router({
     ,{path: '/pager', name: 'pager', component: PagerExample}
     ,{path: '/sticky', name: 'sticky', component: StickyExample}
     ,{path: '/scroll', name: 'scroll', component: ScrollExample}
+    ,{path: '/table', name: 'table', component: TableExample}
+    ,{path: '/form', name: 'form', component: FormExample}
   ]
 })

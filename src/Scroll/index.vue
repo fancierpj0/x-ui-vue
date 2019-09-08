@@ -448,7 +448,7 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   @import '../var';
   $scrollBarWidth:16px;
   $draggerRailColor:rgba(0,0,0,0.15);

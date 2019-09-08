@@ -71,6 +71,9 @@
                   <nav-item name="input">
                     <router-link to="/input">Input</router-link>
                   </nav-item>
+                  <nav-item name="form">
+                    <router-link to="/form">Form</router-link>
+                  </nav-item>
                 </sub-nav>
                 <!--数据展示-->
                 <sub-nav name="dataOutput">
@@ -83,6 +86,9 @@
                   </nav-item>
                   <nav-item name="cascader">
                     <router-link to="/cascader">Cascader</router-link>
+                  </nav-item>
+                  <nav-item name="table">
+                    <router-link to="/table">Table</router-link>
                   </nav-item>
                 </sub-nav>
               </sub-nav>
