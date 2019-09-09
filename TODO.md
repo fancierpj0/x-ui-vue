@@ -6,3 +6,11 @@
 
 + 以`this.$toast()`的方式反复呼出toast，会报`Error in nextTick: "TypeError: Cannot read property 'style' of undefined"`，但并不影响使用
 
+让Input 注入form的eventBus
+change、blur、input
+分别发射事件
+
+在formitem中
+，根据rules中{}指定的trigger
+，选择性监听change、blur、input
+，在监听cb中validate

@@ -29,4 +29,10 @@ const findInDeepByField = (which, value, field='id') => {
   }
 };
 
-export {findByField,findInDeepByField}
+const isEmpty = (whatever) => {
+  if(whatever === undefined || whatever === null || whatever === '') return true;
+  if(Array.isArray(whatever)) return whatever.length === 0;
+  if(Object.prototype.toString.call(whatever)==='[object Object]') return Object.keys(whatever).length === 0;
+};
+
+export {findByField,findInDeepByField,isEmpty}

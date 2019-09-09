@@ -5,13 +5,10 @@
       :value="value"
       :disabled="disabled"
       :readonly="readonly"
-      @change="$emit('change',$event)"
-      @input="$emit('input',$event)"
+      @change="onChange"
+      @input="onInput"
+      @blur="onBlur"
     />
-    <template v-if="error">
-      <Icon name="error" :class="errorIconClass"></Icon>
-      <span :class="errorMessageClass">{{ error }}</span>
-    </template>
   </div>
 </template>
 
@@ -22,6 +19,14 @@ import {UI_PREFIX} from "../constant";
 export default {
   name: "Input"
   ,components: {Icon}
+  ,inject:{
+    eventBus:{from:'eventBus',default:null}
+    ,field:{from:'field', default: null}
+  }
+  ,model:{
+    prop:'value'
+    ,event:'input'
+  }
   ,props: {
     value: {type: [String,Date]}
     ,disabled: {type: Boolean, default: false}
@@ -32,11 +37,22 @@ export default {
     inputWrapperClass(){
       return [`${UI_PREFIX}inputWrapper`,{error:this.error}];
     }
-    ,errorIconClass(){
-      return `${UI_PREFIX}inputWrapper-ErrorIcon`;
+  }
+  ,methods:{
+    onInput(e){
+      const value = e.target.value;
+      this.$emit('input', value);
+      this.eventBus && this.eventBus.$emit(`formItem:input`, value, this.field);
     }
-    ,errorMessageClass(){
-      return `${UI_PREFIX}inputWrapper-ErrorMessage`;
+    ,onChange(e){
+      const value = e.target.value;
+      this.$emit('change', value);
+      this.eventBus && this.eventBus.$emit(`formItem:change`, value, this.field);
+    }
+    ,onBlur(e){
+      const value = e.target.value;
+      this.$emit('blur', value);
+      this.eventBus && this.eventBus.$emit(`formItem:blur`, value, this.field);
     }
   }
 };
@@ -47,13 +63,9 @@ export default {
 
 $input-font-size:$font-size;
 $input-line-height:$line-height;
-$input-border-color-hover:$border-color-hover;
-$input-box-shadow-color:$box-shadow-color;
 $input-border:1px solid $border-color;
 $input-border-radius:$border-radius;
-$box-shadow-color: rgba(0, 0, 0, 0.5);
 $errorColor: #f1453d;
-
 
 .#{$ui-prefix}inputWrapper {
   display: inline-flex;
@@ -65,16 +77,20 @@ $errorColor: #f1453d;
   > input {
     border: $input-border;
     border-radius: $input-border-radius;
-    padding: .5em 1em;
+    padding: 5px 1em;
     font-size: $input-font-size;
     line-height:$input-line-height; // input的line-height并不会继承父元素的而是normal，这个值和浏览器和字体有关
+    color:$color;
+    transition:box-shadow .2s ease-in-out,border .2s ease-in-out;
+    box-shadow: 0 0 0 2px fade_out($blue, 1);
 
     &:hover {
-      border-color: $border-color-hover;
+      border-color: $blue;
     }
 
     &:focus {
-      box-shadow: inset 0 1px 3px $box-shadow-color;
+      border-color:$blue;
+      box-shadow: 0 0 0 2px fade_out($blue, 0.7);
       outline: none;
     }
 
@@ -92,12 +108,5 @@ $errorColor: #f1453d;
     }
   }
 
-  &-ErrorIcon {
-    fill: $errorColor;
-  }
-
-  &-ErrorMessage{
-    color: $errorColor;
-  }
 }
 </style>
