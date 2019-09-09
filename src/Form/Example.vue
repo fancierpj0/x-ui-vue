@@ -18,7 +18,7 @@
                         会显示  名字重复咯~~
                         Promise.all 返回的结果的顺序是按照 Promise.all(p1,p2,p3) 传递的顺序(而不是先完成的排前面)
                     -->
-                    <form-item field="username" label="" :rules="[{validator:validate1},{maxLength:6,message:'太长'}]" >
+                    <form-item field="username" label="" :rules="[{validator:validate1},{maxLength:7,message:'太长'}]" >
                         <Input type="text" v-model="formData.username" />
                     </form-item>
 
@@ -70,7 +70,7 @@
       ,validate2(value){
         return new Promise((resolve, reject) => {
           setTimeout(() => {
-            if (passwd===value) {
+            if (passwd==value) {
               resolve()
             } else {
               reject('密码不正确~~')

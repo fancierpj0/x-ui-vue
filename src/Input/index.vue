@@ -8,6 +8,7 @@
       @change="onChange"
       @input="onInput"
       @blur="onBlur"
+      @focus="onFocus"
     />
   </div>
 </template>
@@ -53,6 +54,11 @@ export default {
       const value = e.target.value;
       this.$emit('blur', value);
       this.eventBus && this.eventBus.$emit(`formItem:blur`, value, this.field);
+    }
+    ,onFocus(e){
+      const value = e.target.value;
+      this.$emit('focus', value);
+      this.eventBus && this.eventBus.$emit(`formItem:focus`, value, this.field);
     }
   }
 };

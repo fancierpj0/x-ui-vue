@@ -60,6 +60,12 @@
         return `${this.errorBoxClass}-errorMessage`;
       }
 
+      /*
+        在displayMode不为null的情况下
+        如果有多个error
+        在同一个trigger类型下，优先显示 `[]` 中被匹配上的非异步验证(不为validator)的靠左边的那一项 产生的 error
+        如果不同trigger类型下都有error，优先显示 `{input:[],blur:[]}` 中key值(trigger)靠前(左)那一大项里的
+      */
       ,errorMsg(){
         if(this.errorsDisplayMode==='all'){
           let arr = [];
@@ -68,17 +74,16 @@
               arr = [...arr, ...this.errors[k]];
             }
           });
-          return arr.join(';');
+          return arr.join(',');
         }else{
           if(Array.isArray(this.rules)){
             return this.errors['change'] && this.errors['change'][0];
           }else{
             let k = Object.keys(this.rules);
             for(let i=0;i<k.length;++i){
-              console.log('k:',k);
-              if(this.errors[k[i]]&&this.errors[k[i]].length!==0){
-                console.log(this.errors[k[i]][0]);
-                return this.errors[k[i]][0];
+              const oneKindOfTriggerErrors = this.errors[k[i]];
+              if (oneKindOfTriggerErrors && oneKindOfTriggerErrors.length !== 0) {
+                return oneKindOfTriggerErrors[0];
               }
             }
           }
@@ -90,6 +95,15 @@
     ,mounted() {
       if(this.rules) this.listenAndVerifyFormChanges();
 
+      /*
+        input时提示出错，这个时候又失去了焦点触发blur/change，又报另一个错
+        这种情况要保留input时的错误
+        另外如果errorsDisplayMode不为all
+        此时就要决定显示哪个错误
+
+        当再次获取焦点时，应该清除blur/change的报错，显示保存的input触发的错误(这也是不能每次有新的error时先清除所有error的原因)
+      */
+      this.listenToFormItemFocus()
     }
     ,methods:{
       validate(fieldValue,rules,cb){
@@ -115,9 +129,17 @@
           }
         });
         const errPromiseList = errors.map(err => (err instanceof Promise ? err : Promise.reject(err)).then(() => {return null;}, (err) => {return err})); // 不论成功失败,都返回一个成功的promise,之所以这样做,是因为Promise.all如果失败只会返回第一个失败的结果,而不是我们期待的所有
-        Promise.all(errPromiseList).then(r=>{ // 此时 r 是所有errPromiseList的结果
-          cb(r.filter(item => item));
-        })
+
+        if(this.errorsDisplayMode === 'all'){ // emmm... 实际中，这种情况似乎并没有？？
+          Promise.all(errPromiseList).then(r=>{ // array,此时 r 是所有errPromiseList的结果
+            cb(r.filter(item => item));
+          })
+        }else{
+          Promise.race(errPromiseList).then(r=>{ // string 如果有非validator的error(或则说异步error)，那么一定是非异步error胜出
+            cb(r);
+          })
+        }
+
       }
 
       ,listenAndVerifyFormChanges(){
@@ -134,19 +156,26 @@
         if (Array.isArray(rules) && rules.length !== 0) {
           this.eventBus.$on(`formItem:${trigger}`, (value, field) => {
             if (field === this.field) {
+              if(this.errors[trigger]) this.errors[trigger] = []; // eg:之前input有错误，现在input后没有错误，就需要清除。(下面虽然重新赋值了，但所处的回调只有在有error时才会调用)
+              this.clearBlurAndChangeErrors(); // 光listenToFormItemFocus是不够的，因为有可能我们Focus的过快，快到之前的blur/change可能存在promise都还没有结果，这样清除时它还正在生成，就清不到，故退而求其次，我们在下一次formItem事件触发时清掉它
               this.validate(value, rules, (errors) => {
-                console.log('errors',errors);
-                if (this.errors['blur'] && trigger !== 'blur') this.errors['blur'] = [];
-                if(this.errors['change'] && trigger!=='change') this.errors['change'] = [];
-                if(!this.errors[trigger]){
-                  this.$set(this.errors, trigger, errors);
-                }else{
-                  this.errors[trigger] = errors;
-                }
+                errors = Array.isArray(errors) ? errors : [errors];
+                (!this.errors[trigger]) ? this.$set(this.errors, trigger, errors) : this.errors[trigger] = errors;
               });
             }
           });
         }
+      }
+      ,listenToFormItemFocus(){
+        this.eventBus.$on('formItem:focus', (value, field) => {
+          if (field === this.field) {
+            this.clearBlurAndChangeErrors();
+          }
+        });
+      }
+      ,clearBlurAndChangeErrors(){
+        this.errors['blur'] ? this.errors['blur'] = [] : this.$set(this.errors, 'blur', []);
+        this.errors['change'] ? this.errors['change'] = [] : this.$set(this.errors, 'change', []);
       }
 
     }
