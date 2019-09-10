@@ -131,11 +131,11 @@
         const errPromiseList = errors.map(err => (err instanceof Promise ? err : Promise.reject(err)).then(() => {return null;}, (err) => {return err})); // 不论成功失败,都返回一个成功的promise,之所以这样做,是因为Promise.all如果失败只会返回第一个失败的结果,而不是我们期待的所有
 
         if(this.errorsDisplayMode === 'all'){ // emmm... 实际中，这种情况似乎并没有？？
-          Promise.all(errPromiseList).then(r=>{ // array,此时 r 是所有errPromiseList的结果
+          Promise.all(errPromiseList).then(r=>{ // array,此时 r 是所有errPromiseList的结果 ; 如果errPromiseList为[]，则r为[]
             cb(r.filter(item => item));
           })
         }else{
-          Promise.race(errPromiseList).then(r=>{ // string 如果有非validator的error(或则说异步error)，那么一定是非异步error胜出
+          Promise.race(errPromiseList).then(r=>{ // string 如果有非validator的error(或则说异步error)，那么一定是非异步error胜出; 如果errPromiseList为[]，则不会走这个then，也就不会调用回调
             cb(r);
           })
         }
@@ -155,10 +155,12 @@
       ,ListenAndVerifyFormChangesCausedByKindOfTrigger(rules,trigger){
         if (Array.isArray(rules) && rules.length !== 0) {
           this.eventBus.$on(`formItem:${trigger}`, (value, field) => {
+            console.log(`接收到formItem，trigger:${trigger}`);
             if (field === this.field) {
               if(this.errors[trigger]) this.errors[trigger] = []; // eg:之前input有错误，现在input后没有错误，就需要清除。(下面虽然重新赋值了，但所处的回调只有在有error时才会调用)
               this.clearBlurAndChangeErrors(); // 光listenToFormItemFocus是不够的，因为有可能我们Focus的过快，快到之前的blur/change可能存在promise都还没有结果，这样清除时它还正在生成，就清不到，故退而求其次，我们在下一次formItem事件触发时清掉它
               this.validate(value, rules, (errors) => {
+                console.log('validate调用了回调，其errors为:',errors);
                 errors = Array.isArray(errors) ? errors : [errors];
                 (!this.errors[trigger]) ? this.$set(this.errors, trigger, errors) : this.errors[trigger] = errors;
               });
