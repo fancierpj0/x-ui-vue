@@ -32,7 +32,11 @@ export default {
     value: {type: [String,Date]}
     ,disabled: {type: Boolean, default: false}
     ,readonly: {type: Boolean, default: false}
-    ,error: {type: Boolean, default: false}
+  }
+  ,data(){
+    return {
+      error:false
+    }
   }
   ,computed:{
     inputWrapperClass(){
@@ -43,22 +47,22 @@ export default {
     onInput(e){
       const value = e.target.value;
       this.$emit('input', value);
-      this.eventBus && this.eventBus.$emit(`formItem:input`, value, this.field);
+      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'input', value);
     }
     ,onChange(e){
       const value = e.target.value;
       this.$emit('change', value);
-      this.eventBus && this.eventBus.$emit(`formItem:change`, value, this.field);
+      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'change', value);
     }
     ,onBlur(e){
       const value = e.target.value;
       this.$emit('blur', value);
-      this.eventBus && this.eventBus.$emit(`formItem:blur`, value, this.field);
+      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'blur', value);
     }
     ,onFocus(e){
       const value = e.target.value;
       this.$emit('focus', value);
-      this.eventBus && this.eventBus.$emit(`formItem:focus`, value, this.field);
+      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'focus', value);
     }
   }
 };

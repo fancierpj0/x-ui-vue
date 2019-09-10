@@ -11,18 +11,21 @@
                 {{formData}}
                 <Form @submit.native="onSubmit"
                     :formData="formData"
+                    :rules="rules"
                 >
 
                     <!--
                         ahhh123 -> errors (2) ["名字重复咯~~", "太长"]
                         会显示  名字重复咯~~
                         Promise.all 返回的结果的顺序是按照 Promise.all(p1,p2,p3) 传递的顺序(而不是先完成的排前面)
+                        :rules="[{validator:validate1},{maxLength:7,message:'太长'}]"
+                        :rules="{blur:[{required:true,message:'必填'},{validator:validate2}],input:[{minLength:6,message:'太短'},{maxLength:10,message:'太长'}]}"
                     -->
-                    <form-item field="username" label="" :rules="[{validator:validate1},{maxLength:7,message:'太长'}]" >
+                    <form-item field="username" label=""  >
                         <Input type="text" v-model="formData.username" />
                     </form-item>
 
-                    <form-item field="password" label="" :rules="{blur:[{required:true,message:'必填'},{validator:validate2}],input:[{minLength:6,message:'太短'},{maxLength:10,message:'太长'}]}" >
+                    <form-item field="password" label="">
                         <Input type="text" v-model="formData.password" />
                     </form-item>
                 </Form>
@@ -48,6 +51,10 @@
           username:''
           ,password:''
           ,age:''
+        }
+        ,rules:{
+          username: [{validator:this.validate1,trigger:'blur'},{maxLength:7,message:'太长',trigger:'input'}]
+          ,password:[{required:true,message:'必填',trigger:'blur'},{validator:this.validate2,trigger:'blur'},{minLength:6,message:'太短',trigger:'input'},{maxLength:10,message:'太长',trigger:'input'}]
         }
       }
     }
