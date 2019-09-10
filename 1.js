@@ -28,3 +28,12 @@ console.log(typeof null); //object
 console.log(typeof undefined); //undefined
 
 console.log([].map(item=>item)); //[]
+
+const arr = [];
+console.log(arr.shift()); // undefined
+console.log(arr); // []
+
+const fn = (a,b,c)=>{
+  console.log(a, b, c);
+}
+fn(...[1, 2, 3]);
