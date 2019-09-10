@@ -47,7 +47,7 @@
           if (rulesOfTheField && Array.isArray(rulesOfTheField) && rulesOfTheField.length !== 0) {
             const rules = this.getRulesThoseNeededToBeVerified(rulesOfTheField, trigger);
             // 回调只有在error存在时才会被调用
-            if(!isEmpty(rules)) validate(value, rules, this.x.bind(this,field,trigger));
+            if(!isEmpty(rules)) validate(value, rules, this.notifyTheFormItemToModifyErrorMsg.bind(this,field,trigger));
           }
         });
       }
@@ -60,7 +60,7 @@
         });
         return rulesNeededToBeVerified;
       }
-      ,x(field,trigger,error){ // error -> null | String
+      ,notifyTheFormItemToModifyErrorMsg(field,trigger,error){ // error -> null | String
         const childrenVnodes = this.$slots.default;
         for (let i = 0; i < childrenVnodes.length; ++i) {
           const childInstance = childrenVnodes[i].componentInstance;
@@ -70,10 +70,14 @@
               childInstance.lastTrigger = trigger; // lastTrigger是上次产生了errorMsg的trigger
 
             }else{
+              /* input->input ：要清除 */
               if(trigger === childInstance.lastTrigger){
                 childInstance.errorMsg = null;
 
-              // ↓如果上次产生errorMsg的是change、blur，而这次不是，那么清除errorMsg
+              /*
+                input -> blur/change ：input产生的errMsg不清除
+                blur/change -> input ：blur/change产生的errMsg要清除
+              */
               }else{
                 if(['change','blur'].includes(childInstance.lastTrigger)){
                   childInstance.errorMsg = null;

@@ -1,5 +1,8 @@
 import {isEmpty} from "../util";
 
+/*
+  ↓采用这种模式主要是考虑到异步error可能会覆盖当前error，故我们选择在promise完成时再调用下一次的validate
+*/
 let busy = false;
 const tasks = [];
 
@@ -16,7 +19,7 @@ const next = () => {
 const validate = (fieldValue, rules, cb, returnAllErrors = false) => {
 
   if(!busy){
-    console.log('!busy');
+    // console.log('!busy');
     busy = true;
 
     const errors = [];
@@ -101,7 +104,7 @@ const validate = (fieldValue, rules, cb, returnAllErrors = false) => {
     }
 
   }else{
-    console.log('busy');
+    // console.log('busy');
     tasks.push([fieldValue, rules, cb, returnAllErrors]);
   }
 
