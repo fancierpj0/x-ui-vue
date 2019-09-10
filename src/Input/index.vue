@@ -32,7 +32,7 @@ export default {
     value: {type: [String,Date]}
     ,disabled: {type: Boolean, default: false}
     ,readonly: {type: Boolean, default: false}
-    ,error: {type: String}
+    ,error: {type: Boolean, default: false}
   }
   ,computed:{
     inputWrapperClass(){
@@ -71,7 +71,7 @@ $input-font-size:$font-size;
 $input-line-height:$line-height;
 $input-border:1px solid $border-color;
 $input-border-radius:$border-radius;
-$errorColor: #f1453d;
+$errorColor: $red;
 
 .#{$ui-prefix}inputWrapper {
   display: inline-flex;
@@ -111,6 +111,15 @@ $errorColor: #f1453d;
   &.error {
     > input {
       border-color: $errorColor;
+      box-shadow: 0 0 0 2px fade_out($red, 1);
+      &:hover{
+        border-color:$red;
+      }
+      &:focus{
+        border-color:$red;
+        box-shadow: 0 0 0 2px fade_out($red, 0.7);
+        outline: none;
+      }
     }
   }
 
