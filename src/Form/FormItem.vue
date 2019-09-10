@@ -57,10 +57,6 @@
         return `${this.errorBoxClass}-errorMessage`;
       }
     }
-    ,mounted() {
-
-    }
-    ,methods:{}
   }
 </script>
 

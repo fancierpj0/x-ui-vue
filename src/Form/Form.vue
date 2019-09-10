@@ -42,15 +42,13 @@
     }
     ,methods:{
       listenAndVerifyFormChanges(){
-        Object.keys(this.rules).forEach(field => {
-          this.eventBus.$on('update:formItem', (field,trigger,value) => {
-            const rulesOfTheField = this.rules[field];
-            if (rulesOfTheField && Array.isArray(rulesOfTheField) && rulesOfTheField.length !== 0) {
-              const rules = this.getRulesThoseNeededToBeVerified(rulesOfTheField, trigger);
-              // 回调只有在error存在时才会被调用
-              if(!isEmpty(rules)) validate(value, rules, this.x.bind(this,field,trigger));
-            }
-          });
+        this.eventBus.$on('update:formItem', (field,trigger,value) => {
+          const rulesOfTheField = this.rules[field];
+          if (rulesOfTheField && Array.isArray(rulesOfTheField) && rulesOfTheField.length !== 0) {
+            const rules = this.getRulesThoseNeededToBeVerified(rulesOfTheField, trigger);
+            // 回调只有在error存在时才会被调用
+            if(!isEmpty(rules)) validate(value, rules, this.x.bind(this,field,trigger));
+          }
         });
       }
       ,getRulesThoseNeededToBeVerified(rules,trigger){
