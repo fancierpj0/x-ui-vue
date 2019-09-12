@@ -19,7 +19,7 @@ console.log(Promise.race([]).then(r => { //不会走这个then
 */
 
 
-console.log([1, 2, 3].includes(1));
+/*console.log([1, 2, 3].includes(1));
 
 console.log([undefined, null].filter(i => i));
 
@@ -36,4 +36,7 @@ console.log(arr); // []
 const fn = (a,b,c)=>{
   console.log(a, b, c);
 }
-fn(...[1, 2, 3]);
+fn(...[1, 2, 3]);*/
+
+let arr = [1,2,3];
+console.log(JSON.parse(JSON.stringify(arr))===arr);

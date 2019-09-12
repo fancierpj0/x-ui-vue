@@ -48,7 +48,7 @@
         <div>
             <p>error</p>
             <div>
-                <Input value="hi input" error="something wrong"></Input>
+                <Input value="hi input" ></Input>
             </div>
         </div>
     </div>

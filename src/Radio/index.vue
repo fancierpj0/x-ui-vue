@@ -74,7 +74,7 @@ export default {
         this[RADIOGROUP_EVENTBUS].$emit("radio:change", this.value);
       } else { // 单个radio时
         this.$emit("change", e.target.checked);
-        this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, "change", e.target.checked);
+        this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, "change");
       }
     }
     ,initChecked(){

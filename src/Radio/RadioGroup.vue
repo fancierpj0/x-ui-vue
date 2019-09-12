@@ -17,10 +17,12 @@
     ,props:{
       checked:{
         type:[String,Number]
+        //emmm... 这不能写required，因为我们是通过v-model传递的 它识别不了
       }
     }
     ,inject:{
       [FORM_EVENTBUS]:{from:FORM_EVENTBUS,default:null}
+      ,field:{from:'field', default: null}
     }
     ,data(){
       return {
@@ -45,8 +47,8 @@
     ,methods:{
       listenToRadioChange(){
         this[RADIOGROUP_EVENTBUS].$on('radio:change', (value) => {
-          this.$emit('change', value);
-          this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'change', value);
+          this.$emit('change', value); // v-model 依赖
+          this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'change');
         });
       }
     }
@@ -54,5 +56,11 @@
 </script>
 
 <style lang="scss">
-
+@import '../var';
+.#{$ui-prefix}radioGroup{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
 </style>
