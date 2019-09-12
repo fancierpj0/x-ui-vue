@@ -71,6 +71,12 @@
                   <nav-item name="input">
                     <router-link to="/input">Input</router-link>
                   </nav-item>
+                  <nav-item name="textarea">
+                    <router-link to="/textarea">Textarea</router-link>
+                  </nav-item>
+                  <nav-item name="radio">
+                    <router-link to="/radio">Radio</router-link>
+                  </nav-item>
                   <nav-item name="form">
                     <router-link to="/form">Form</router-link>
                   </nav-item>

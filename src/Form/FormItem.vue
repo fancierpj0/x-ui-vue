@@ -17,7 +17,6 @@
   export default {
     name: "FormItem"
     ,components:{Icon}
-    ,inject:['eventBus']
     ,props:{
       field:{
         type:String

@@ -15,13 +15,13 @@
 
 <script>
 import Icon from "../Icon";
-import {UI_PREFIX} from "../constant";
+import {UI_PREFIX,FORM_EVENTBUS} from "../constant";
 
 export default {
   name: "Input"
   ,components: {Icon}
   ,inject:{
-    eventBus:{from:'eventBus',default:null}
+    [FORM_EVENTBUS]:{from:FORM_EVENTBUS,default:null}
     ,field:{from:'field', default: null}
   }
   ,model:{
@@ -45,24 +45,20 @@ export default {
   }
   ,methods:{
     onInput(e){
-      const value = e.target.value;
-      this.$emit('input', value);
-      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'input', value);
+      this.$emit('input', e.target.value, e);
+      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'input');
     }
     ,onChange(e){
-      const value = e.target.value;
-      this.$emit('change', value);
-      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'change', value);
+      this.$emit('change', e.target.value, e);
+      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'change');
     }
     ,onBlur(e){
-      const value = e.target.value;
-      this.$emit('blur', value);
-      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'blur', value);
+      this.$emit('blur', e.target.value, e);
+      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'blur');
     }
     ,onFocus(e){
-      const value = e.target.value;
-      this.$emit('focus', value);
-      this.eventBus && this.eventBus.$emit(`update:formItem`, this.field, 'focus', value);
+      this.$emit('focus', e.target.value, e);
+      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'focus');
     }
   }
 };

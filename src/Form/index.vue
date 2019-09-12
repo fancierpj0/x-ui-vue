@@ -8,6 +8,7 @@
   import Vue from 'vue';
   import validate from "./validate";
   import {isEmpty} from "../util";
+  import {FORM_EVENTBUS} from "../constant";
 
   export default {
     name: "Form"
@@ -29,12 +30,12 @@
     }
     ,data(){
       return {
-        eventBus: new Vue()
+        [FORM_EVENTBUS]: new Vue()
       }
     }
     ,provide(){
       return {
-        eventBus: this.eventBus
+        [FORM_EVENTBUS]: this[FORM_EVENTBUS]
       }
     }
     ,mounted() {
@@ -42,12 +43,12 @@
     }
     ,methods:{
       listenAndVerifyFormChanges(){
-        this.eventBus.$on('update:formItem', (field,trigger,value) => {
+        this[FORM_EVENTBUS].$on('update:formItem', (field,trigger) => {
           const rulesOfTheField = this.rules[field];
           if (rulesOfTheField && Array.isArray(rulesOfTheField) && rulesOfTheField.length !== 0) {
             const rules = this.getRulesThoseNeededToBeVerified(rulesOfTheField, trigger);
             // 回调只有在error存在时才会被调用
-            if(!isEmpty(rules)) validate(value, rules, this.notifyTheFormItemToModifyErrorMsg.bind(this,field,trigger));
+            if(!isEmpty(rules)) validate(this.formData[field], rules, this.notifyTheFormItemToModifyErrorMsg.bind(this,field,trigger));
           }
         });
       }
