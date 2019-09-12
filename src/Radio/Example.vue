@@ -17,7 +17,7 @@
             <div>
                 {{phone}}
                 <RadioGroup v-model="phone">
-                    <Radio value="0">Apple</Radio>
+                    <Radio value="0"><Icon name="right"/>Apple</Radio>
                     <Radio value="1">Android</Radio>
                     <Radio value="2">Windows</Radio>
                 </RadioGroup>
@@ -30,9 +30,10 @@
 <script>
   import Radio from './index';
   import RadioGroup from './RadioGroup';
+  import Icon from "../Icon";
   export default {
     name: "Example"
-    ,components:{Radio,RadioGroup}
+    ,components:{Radio,RadioGroup,Icon}
     ,data(){
       return {
         single:false

@@ -18,12 +18,10 @@
 </template>
 
 <script>
-// import Icon from "../Icon";
 import { UI_PREFIX, FORM_EVENTBUS, RADIOGROUP_EVENTBUS } from "../constant";
 
 export default {
   name: "Radio"
-  // ,components: {Icon}
   ,inject: {
     [RADIOGROUP_EVENTBUS]: { from: RADIOGROUP_EVENTBUS, default: null }
     ,[FORM_EVENTBUS]: { from: FORM_EVENTBUS, default: null }
@@ -95,6 +93,11 @@ export default {
 
 <style lang="scss">
 @import "../var";
+$radioDiameter:14px;
+$radioBorderWidth:1px;
+$innerRadioDiameter:8px;
+$innerRadioLeft:($radioDiameter - $radioBorderWidth*2 - $innerRadioDiameter)/2;
+$innerRadioTop:$innerRadioLeft;
 
 .#{$ui-prefix}radioWrapper {
   display: inline-flex;
@@ -122,10 +125,10 @@ export default {
 
     &-fakeRadio{
       box-sizing:border-box;
-      width:14px;
-      height:14px;
+      width:$radioDiameter;
+      height:$radioDiameter;
       position:relative;
-      border:1px solid $border-color;
+      border:$radioBorderWidth solid $border-color;
       border-radius:50%;
       transition:all .2s ease-in-out;
 
@@ -133,11 +136,11 @@ export default {
         position: absolute;
         display:block;
         content:'';
-        width:8px;
-        height:8px;
-        left:2px;
-        top:2px;
-        border-radius:6px;
+        width:$innerRadioDiameter;
+        height:$innerRadioDiameter;
+        left:$innerRadioLeft;
+        top:$innerRadioTop;
+        border-radius:50%;
         background-color:$blue;
         opacity: 0;
         transition:all .2s ease-in-out;
@@ -153,6 +156,10 @@ export default {
         }
       }
     }
+  }
+
+  svg{
+    margin:0 2px;
   }
 
 }
