@@ -28,6 +28,17 @@
                     <form-item field="password" label="">
                         <Input type="text" v-model="formData.password" />
                     </form-item>
+
+                    <form-item field="profile" label="">
+                        <Textarea type="text" v-model="formData.profile" />
+                    </form-item>
+
+                    <form-item field="sex">
+                        <radio-group v-model="formData.sex">
+                            <radio value="0">女</radio>
+                            <radio value="1">男</radio>
+                        </radio-group>
+                    </form-item>
                 </Form>
             </div>
         </div>

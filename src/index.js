@@ -29,3 +29,6 @@ export {default as SlideItem} from './Slide/SlideItem';
 export {default as Sticky} from './Sticky';
 export {default as Table} from './Table';
 export {default as TableItem} from './Table/TableColumn';
+export {default as Form} from './Form';
+export {default as FormItem} from './Form/FormItem';
+export {default as Radio} from './Radio';

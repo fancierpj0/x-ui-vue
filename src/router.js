@@ -17,6 +17,8 @@ import StickyExample from './Sticky/Example'
 import ScrollExample from './Scroll/Example'
 import TableExample from './Table/Example'
 import FormExample from './Form/Example'
+import TextareaExample from './Textarea/Example'
+import RadioExample from './Radio/Example'
 
 
 Vue.use(Router);
@@ -42,5 +44,7 @@ export default new Router({
     ,{path: '/scroll', name: 'scroll', component: ScrollExample}
     ,{path: '/table', name: 'table', component: TableExample}
     ,{path: '/form', name: 'form', component: FormExample}
+    ,{path: '/textarea', name: 'textarea', component: TextareaExample}
+    ,{path: '/radio', name: 'radio', component: RadioExample}
   ]
 })
