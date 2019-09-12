@@ -39,6 +39,16 @@
                             <radio value="1">男</radio>
                         </radio-group>
                     </form-item>
+
+
+                    <form-item field="friends">
+                        {{formData.friends}}
+                        <checkbox-group v-model="formData.friends">
+                            <Checkbox value="0">月儿兰</Checkbox>
+                            <Checkbox value="1">流沙</Checkbox>
+                            <Checkbox value="2">苏海伦</Checkbox>
+                        </checkbox-group>
+                    </form-item>
                 </Form>
             </div>
         </div>
@@ -52,13 +62,15 @@
   import Textarea from '../Textarea';
   import Radio from '../Radio';
   import RadioGroup from '../Radio/RadioGroup';
+  import Checkbox from '../Checkbox';
+  import CheckboxGroup from '../Checkbox/CheckboxGroup';
 
   const username = ['ahhh111','ahhh123','ahhh234'];
   const passwd = 123456;
 
   export default {
     name: "Example"
-    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio}
+    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup}
     ,data(){
       return {
         formData:{
@@ -67,12 +79,14 @@
           ,age:''
           ,profile:''
           ,sex:''
+          ,friends:[]
         }
         ,rules:{
           username: [{validator:this.validate1,trigger:'blur'},{maxLength:7,message:'太长',trigger:'input'}]
           ,password:[{required:true,message:'必填',trigger:'blur'},{validator:this.validate2,trigger:'blur'},{minLength:6,message:'太短',trigger:'input'},{maxLength:10,message:'太长',trigger:'input'}]
           ,profile:[{required:true,message:'必填',trigger:'blur'},{minLength:20,message:'太短',trigger:'input'},{maxLength:25,message:'太长',trigger:'input'}]
           ,sex:[{required:true,message:'必选',trigger:'change'}]
+          ,friends:[{required:true,message:'必选111',trigger:'change'}]
         }
       }
     }
