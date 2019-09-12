@@ -19,6 +19,7 @@ import TableExample from './Table/Example'
 import FormExample from './Form/Example'
 import TextareaExample from './Textarea/Example'
 import RadioExample from './Radio/Example'
+import CheckboxExample from './Checkbox/Example'
 
 
 Vue.use(Router);
@@ -46,5 +47,6 @@ export default new Router({
     ,{path: '/form', name: 'form', component: FormExample}
     ,{path: '/textarea', name: 'textarea', component: TextareaExample}
     ,{path: '/radio', name: 'radio', component: RadioExample}
+    ,{path: '/checkbox', name: 'checkbox', component: CheckboxExample}
   ]
 })

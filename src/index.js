@@ -32,3 +32,6 @@ export {default as TableItem} from './Table/TableColumn';
 export {default as Form} from './Form';
 export {default as FormItem} from './Form/FormItem';
 export {default as Radio} from './Radio';
+export {default as RadioGroup} from './Radio/RadioGroup';
+export {default as Checkbox} from './Checkbox';
+export {default as CheckboxGroup} from './Checkbox/CheckboxGroup';
