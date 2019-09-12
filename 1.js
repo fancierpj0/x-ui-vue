@@ -40,3 +40,6 @@ fn(...[1, 2, 3]);*/
 
 let arr = [1,2,3];
 console.log(JSON.parse(JSON.stringify(arr))===arr);
+
+let fn = ()=>{}
+console.log(typeof fn);

@@ -11,19 +11,23 @@
 </template>
 
 <script>
-  import {UI_PREFIX} from "../constant";
+  import {FORM_EVENTBUS, UI_PREFIX} from "../constant";
   import Icon from '../Icon';
+  import {isEmpty} from "../util";
+  import Validator from "./Validator";
 
   export default {
     name: "FormItem"
     ,components:{Icon}
+    ,inject: {
+      _rules: { from: "rules", default: null }
+      ,formData: { from: 'formData', default: null }
+      ,[FORM_EVENTBUS]: { from: FORM_EVENTBUS, default: null }
+    }
     ,props:{
       field:{
         type:String
         ,required:true
-      }
-      ,rules:{
-        type:Array
       }
     }
     ,data(){
@@ -54,6 +58,55 @@
       }
       ,errorMessageClass(){
         return `${this.errorBoxClass}-errorMessage`;
+      }
+      ,rules(){
+        if(!this._rules) return null;
+        return this._rules[this.field];
+      }
+    }
+    ,mounted() {
+      if(!isEmpty(this.rules)) this.listenAndVerifyFieldValueChange();
+    }
+    ,methods:{
+      listenAndVerifyFieldValueChange(){
+        const validator = new Validator();
+        this[FORM_EVENTBUS].$on('update:formItem', (field,trigger) => {
+          if(field === this.field){
+            const rules = this.getRulesThoseNeededToBeVerified(this.rules, trigger);
+            // 回调只有在error存在时才会被调用
+            if(!isEmpty(rules)) validator.validate(this.formData[field], rules, this.updateErrorMsg.bind(this,trigger));
+          }
+        });
+      }
+      ,getRulesThoseNeededToBeVerified(rules,trigger){
+        const rulesNeededToBeVerified = [];
+        rules.forEach(rule => {
+          if (rule.trigger === trigger) {
+            rulesNeededToBeVerified.push(rule);
+          }
+        });
+        return rulesNeededToBeVerified;
+      }
+      ,updateErrorMsg(trigger,error){
+        if(error){
+          this.errorMsg = error;
+          this.lastTrigger = trigger; // lastTrigger是上次产生了errorMsg的trigger
+
+        }else{
+          /* input->input ：要清除 */
+          if(trigger === this.lastTrigger){
+            this.errorMsg = null;
+
+            /*
+              input -> blur/change ：input产生的errMsg不清除
+              blur/change -> input ：blur/change产生的errMsg要清除
+            */
+          }else{
+            if(['change','blur'].includes(this.lastTrigger)){
+              this.errorMsg = null;
+            }
+          }
+        }
       }
     }
   }

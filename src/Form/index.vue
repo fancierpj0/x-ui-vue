@@ -1,12 +1,12 @@
 <template>
-    <form>
+    <form @submit="onSubmit">
         <slot></slot>
     </form>
 </template>
 
 <script>
   import Vue from 'vue';
-  import validate from "./validate";
+  import Validator from "./Validator";
   import {isEmpty} from "../util";
   import {FORM_EVENTBUS} from "../constant";
 
@@ -17,7 +17,6 @@
         type:Object
         ,required:true
       }
-
       /*
         {
              username: [{ required: true, message: 'The name cannot be empty', trigger: 'blur' }]
@@ -36,30 +35,13 @@
     ,provide(){
       return {
         [FORM_EVENTBUS]: this[FORM_EVENTBUS]
+        ,rules: this.rules // undefined | Object
+        ,formData: this.formData
       }
-    }
-    ,mounted() {
-      if(this.rules) this.listenAndVerifyFormChanges();
     }
     ,methods:{
-      listenAndVerifyFormChanges(){
-        this[FORM_EVENTBUS].$on('update:formItem', (field,trigger) => {
-          const rulesOfTheField = this.rules[field];
-          if (rulesOfTheField && Array.isArray(rulesOfTheField) && rulesOfTheField.length !== 0) {
-            const rules = this.getRulesThoseNeededToBeVerified(rulesOfTheField, trigger);
-            // 回调只有在error存在时才会被调用
-            if(!isEmpty(rules)) validate(this.formData[field], rules, this.notifyTheFormItemToModifyErrorMsg.bind(this,field,trigger));
-          }
-        });
-      }
-      ,getRulesThoseNeededToBeVerified(rules,trigger){
-        const rulesNeededToBeVerified = [];
-        rules.forEach(rule => {
-          if (rule.trigger === trigger) {
-            rulesNeededToBeVerified.push(rule);
-          }
-        });
-        return rulesNeededToBeVerified;
+      onSubmit(e){
+        e.preventDefault();
       }
       ,notifyTheFormItemToModifyErrorMsg(field,trigger,error){ // error -> null | String
         const childrenVnodes = this.$slots.default;
