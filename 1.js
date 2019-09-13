@@ -43,3 +43,15 @@ console.log(JSON.parse(JSON.stringify(arr))===arr);
 
 let fn = ()=>{}
 console.log(typeof fn);
+
+console.log((new Promise((resolve,reject)=>{
+
+})) instanceof Promise);
+
+console.log('123' instanceof Promise)
+console.log({} instanceof Promise)
+console.log(fn instanceof Promise)
+
+Promise.reject({key:'username',msg:'重复'}).then(null,(err)=>{
+  console.log(err);
+})

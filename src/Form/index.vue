@@ -7,8 +7,9 @@
 <script>
   import Vue from 'vue';
   import Validator from "./Validator";
-  import {isEmpty} from "../util";
   import {FORM_EVENTBUS} from "../constant";
+
+  const validator = new Validator();
 
   export default {
     name: "Form"
@@ -42,6 +43,19 @@
     ,methods:{
       onSubmit(e){
         e.preventDefault();
+        if(this.rules){
+          validator.validate(this.formData,this.rules,(error)=>{ // object | null
+            if(!error){
+              this.$emit('submit',e);
+            }else{
+              Object.keys(error).forEach(fieldName => {
+                this.notifyTheFormItemToModifyErrorMsg(fieldName,'change',error[fieldName][0])
+              });
+            }
+          })
+        }else{
+          this.$emit('submit',e);
+        }
       }
       ,notifyTheFormItemToModifyErrorMsg(field,trigger,error){ // error -> null | String
         const childrenVnodes = this.$slots.default;

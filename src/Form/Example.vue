@@ -9,7 +9,7 @@
             <p></p>
             <div>
                 {{formData}}
-                <Form @submit.native="onSubmit"
+                <Form @submit="onSubmit"
                     :formData="formData"
                     :rules="rules"
                 >
@@ -49,6 +49,10 @@
                             <Checkbox value="2">苏海伦</Checkbox>
                         </checkbox-group>
                     </form-item>
+
+                    <form-item>
+                        <Button tag-type="button">提交</Button>
+                    </form-item>
                 </Form>
             </div>
         </div>
@@ -64,36 +68,40 @@
   import RadioGroup from '../Radio/RadioGroup';
   import Checkbox from '../Checkbox';
   import CheckboxGroup from '../Checkbox/CheckboxGroup';
+  import Button from '../Button';
 
   const username = ['ahhh111','ahhh123','ahhh234'];
   const passwd = 123456;
 
   export default {
     name: "Example"
-    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup}
+    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup,Button}
     ,data(){
       return {
         formData:{
           username:''
           ,password:''
-          ,age:''
           ,profile:''
           ,sex:''
           ,friends:[]
         }
         ,rules:{
           username: [{validator:this.validate1,trigger:'blur'},{maxLength:7,message:'太长',trigger:'input'}]
+
           ,password:[{required:true,message:'必填',trigger:'blur'},{validator:this.validate2,trigger:'blur'},{minLength:6,message:'太短',trigger:'input'},{maxLength:10,message:'太长',trigger:'input'}]
+
           ,profile:[{required:true,message:'必填',trigger:'blur'},{minLength:20,message:'太短',trigger:'input'},{maxLength:25,message:'太长',trigger:'input'}]
+
           ,sex:[{required:true,message:'必选',trigger:'change'}]
+
           ,friends:[{required:true,message:'必选111',trigger:'change'}]
         }
       }
     }
     ,methods:{
       onSubmit(e){
-        e.preventDefault();
-        console.log(e);
+        console.log('e:',e);
+        console.log('准备提交')
       }
       ,validate1(value){
         return new Promise((resolve, reject) => {

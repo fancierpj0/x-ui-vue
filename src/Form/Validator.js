@@ -2,127 +2,149 @@ import {isEmpty} from "../util";
 
 class Validator {
   constructor(){
-    this.cur = null;
+    this.latestAsyncValidateList = null;
   }
 
   static addRule(name,fn){
     if (typeof fn !== 'function') return console.error(`the second parameter of 'Validator.addRule' must be a function!`);
     !Validator.extraRules && (Validator.extraRules = {});
-    Validator.extraRules[name] = fn;
+    Validator.extraRules[name] = fn; // 返回Boolean
   }
 
-/*
-  ↓采用这种模式(姑且称之为expired模式)主要是考虑到
+  validate(formData, _rules, cb, returnAllErrors = false) { // 调用cb时候传递的参数只可能为 null | 非空数组(returnAllErrors为true时) | String(returnAllErrors为false时)
 
-  如果一个规则还在进行异步验证
-  但新的验证已经触发
-  应该取消掉那个异步验证
-*/
-  validate(fieldValue, rules = [], cb, returnAllErrors = false) {
-    if (this.cur) {
-      this.cur.expired = true;
+    if (this.latestAsyncValidateList && !this.latestAsyncValidateList.expired) { // 最近正在执行的异步验证
+      /*
+        ↓采用这种模式(姑且称之为expired模式)主要是考虑到
+
+        如果一个规则还在进行异步验证
+        但新的验证已经触发
+        应该取消掉那个异步验证
+      */
+      this.latestAsyncValidateList.expired = true;
+    }
+
+    let rules = []
+      , isMultifield = false;
+
+    if(typeof formData === 'string' || Array.isArray(formData)){ // 单个字段进行验证，array时是checkbox的值
+      rules = _rules;
+    }else{ // 多个字段或者说整个表单进行验证
+      Object.keys(_rules).forEach(fieldName => {
+        rules.push(..._rules[fieldName].map(rule => (rule.key = fieldName, rule)));
+        isMultifield = true;
+        returnAllErrors = true;
+      });
     }
 
     const errors = [];
+    let hasAsync = false
+      , fieldValue = formData;
 
     for (let i = 0; i < rules.length; ++i) {
       const rule = rules[i];
+      if(isMultifield) fieldValue = formData[rule.key];
+
       if (rule.validator) {
-        const promise = rule.validator(fieldValue);
-        errors.push(promise);
+        /*
+          如果想要进行异步验证，直接instance.validate(,[{validator:fn,trigger:String}],)
+          ，validator函数必须返回一个promise
+          ，如果不是promise而是 String(有错误)|Null(没错误) 则为同步验证
+        */
+        const r = rule.validator(fieldValue);
+        if (!(r instanceof Promise)) { // String | Null
+          if (r !== null) { // 有error
+            if (!returnAllErrors) return cb(r);
+            errors.push(isMultifield ? [rule.key, r] : r); // x 代表 可能是字符串也可能是promise
+          }
+        }else{ // promise
+          errors.push(isMultifield ? [rule.key, r] : r); // 即使returnAllErrors为false也需要存放在errors数组中，因为可能这一组rules里有多个promise，我们暂时并不能知道他们谁先返回，谁有error
+          hasAsync = true;
+        }
         continue;
       }
 
-      if (rule.required && isEmpty(fieldValue)) {
-        errors.push(rule.message);
+      if (rule.required && isEmpty(fieldValue) ||
+        rule.minLength && !isEmpty(fieldValue) && fieldValue.length < rule.minLength ||
+        rule.maxLength && !isEmpty(fieldValue) && fieldValue.length > rule.maxLength ||
+        rule.pattern && !(rule.pattern.test(fieldValue))) {
+        if (!returnAllErrors) return cb(rule.message);
+        errors.push(isMultifield ? [rule.key, rule.message] : rule.message);
         continue;
-      }
-      if (rule.minLength && !isEmpty(fieldValue) && fieldValue.length < rule.minLength) {
-        errors.push(rule.message);
-        continue;
-      }
-      if (rule.maxLength && !isEmpty(fieldValue) && fieldValue.length > rule.maxLength) {
-        errors.push(rule.message);
-        continue;
-      }
-      if (rule.pattern) {
-        if (!(rule.pattern.test(fieldValue))) {
-          errors.push(rule.message);
-          continue;
-        }
       }
 
       if(Validator.extraRules){
-        const key = Object.keys(rule).filter(item => {
-          return !(item === 'trigger') && !(item === 'message')
-        });
-        if (key in Validator.extraRules) {
-          Validator.extraRules[key](fieldValue,rule[key]);
+        const key = Object.keys(rule).filter(item => {return !(item === 'trigger') && !(item === 'message')});
+        if (Validator.extraRules[key] && !Validator.extraRules[key](fieldValue, rule[key])) {
+          if (!returnAllErrors) return cb(rule.message);
+          errors.push(isMultifield ? [rule.key, rule.message] : rule.message);
         }
       }
+    }
+
+    if (errors.length === 0) {
+      return cb(null);
+    }
+
+    if (!hasAsync) { // isMultifield 且 无异步验证
+      return cb(errors);
     }
 
 
 
     /*
-      当returnAllErrors为true时
-      我们期待最终的返回值是一个[err1,err2,err3...]
-      其中的err1、err2、err3...是String
+      all方法需要注意一点，Promise.all如果失败只会返回第一个失败的结果,而不是我们all([...])里所有promise的结果
+      race需要注意的是它总是返回第一个完成的promise，不论解决还是拒绝，这也是为什么不能再singleField验证中使用它的原因(singleField验证中我们是期望得到第一个失败的promise)
+      如果then中return有返回值一定返回一个成功态的promise，除非在这里抛出错误或则这个返回值是一个失败或则即将失败的promise
 
-      但当rule匹配rule.validator，产生的err是一个promise
-      并且这样的promise可能并不止一个 (So，我们并不能通过在promise.then中将其余的非promise的err加入来实现统一返回)
-      So，要想把握住这些个promise完成的时机 统一返回所有err
-      我们选择使用Promise.all
-      So，我们将非promise的err统一转换成promise (也可以不转换，在all.then()中加入，但这样需要先将这些非promise的err从errors数组中提取出来)
-      另外当调用Promise.all方法需要注意一点，Promise.all如果失败只会返回第一个失败的结果,而不是我们期待的所有
-      So，我们将所有promise再then一下返回一个成功态的promise (那些个本来是promise的err在状态转换后也一定会因为这个then而返回一个成功态的promise)
+      returnAllErrors
+      →true:
+          errors:array<Promise,String> -> all
+      →false:
+          errors:array<Promise> -> race(×) 不能用race 还是只能用all
+
+      综上，我们选择all方法
+      ，另外为了能确实拿到所有的错误
+      ，需要将errors处理成一定会返回成功态promise的errPromiseList (通过then return)
+      ，之所以要这么处理是因为:Promise.all如果失败只会返回第一个失败的结果
     */
 
-    const errPromiseList = errors.map(err => (err instanceof Promise ? err : Promise.reject(err)).then(() => {
-      return null;
-    }, (err) => {
-      return err // 如果return有返回值一定返回一个成功态的promise，除非在这里抛出错误或则这个返回值是一个失败或则即将失败的promise
-    }));
-
-    this.cur = errPromiseList;
-
-    /*
-      race接受的如果是一个[]，则不会调用then
-      all接受的如果是一个[]，则会返回[]
-      调用cb时候传递的参数只可能为 null | 非空数组(returnAllErrors为true时) | String(returnAllErrors为false时)
-    */
-
-    if (returnAllErrors === false) {
-      /*
-        如果有非validator的error(或则说异步error)，那么一定是非异步error胜出
-        如果errPromiseList为[]，则不会走then
-      */
-      if (errPromiseList.length !== 0) {
-        Promise.race(errPromiseList).then(r => {
-          if (!errPromiseList.expired) {
-            cb(r); // string | null(为null是rule.validator，且没有错误的情况)
-            this.cur = null;
-          }
-        });
-      } else {
-        cb(null);
-        this.cur = null;
-      }
-
-      // emmm... 实际中，这种情况↓似乎并没有？？
-    } else {
-      Promise.all(errPromiseList).then(r => { // array 此时 r 是所有errPromiseList的结果 ; 如果errPromiseList为[]，则r为[]
-        if (!errPromiseList.expired) {
-          r = r.filter(item => item); // 清除没有错误的promise返回的null
-          if (r.length !== 0) {
-            cb(r); // 非[]的Array
-          } else {
-            cb(null);
-          }
-          this.cur = null; // 过期的时候不用清除, 因为此时cur一定已经被最新的validate的errPromiseList替代
-        }
+    const errPromiseList = !isMultifield ?
+      errors.map(err => {
+        const promise = (err instanceof Promise ? err : Promise.reject(err));
+        return promise.then(() => {return null;}, (err) => {return err;});
+      })
+      :errors.map(([key,x]) => {
+        const promise = (x instanceof Promise ? x : Promise.reject(x));
+        return promise.then(() => {return [key, null];}, (err) => {return [key, err];});
       });
-    }
+
+    this.latestAsyncValidateList = errPromiseList;
+
+    Promise.all(errPromiseList).then(r => { // array 此时 r 是所有errPromiseList的结果
+      if (!errPromiseList.expired) {
+        r = r.filter(item => !isMultifield ? item : item[1]); // 清除没有错误的promise返回的null
+        if (r.length !== 0) {
+          /*
+            如果有多个异步验证出错 且 returnAllErrors = false
+            ，会返回[{validator:fn1},{validator:fn2}] 靠前的的那个验证的错误
+          */
+          if(!isMultifield){
+            returnAllErrors ? cb(r) : cb(r[0]);
+          }else{
+            const result = {};
+            r.map(([key, value]) => {
+              result[key] = result[key] || [];
+              result[key].push(value);
+            });
+            cb(result);
+          }
+        } else {
+          cb(null);
+        }
+      }
+    });
+
   }
 
 }

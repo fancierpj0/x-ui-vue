@@ -27,7 +27,6 @@
     ,props:{
       field:{
         type:String
-        ,required:true
       }
     }
     ,data(){
