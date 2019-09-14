@@ -126,11 +126,16 @@ onMouseDownButton onMouseDownRail onMouseMoveDragger onWheel
       ,draggerClass(){return `${this.draggerContainerClass}-dragger`;}
       ,draggerInnerClass(){return [`${this.draggerClass}-inner`,{isScrolling:this.isScrolling}];}
 
+      //↓即是否有富裕的空间可滚动
       , scrollable(){
         // ↓这样的话dragger高度计算不出来 emmm.... ???
-        // return this.maxContentY > 0;
+        // return this.maxContentY > 0;  // ←不能直接return 这个表达式
 
-        if(this.maxContentY <= 0) return false; // !不能简化
+        if(this.maxContentY <= 0) {
+          this.contentY = 0;
+          this.draggerY = 0;
+          return false;
+        }
         return true;
       }
       ,checkScrollBarVisible(){
