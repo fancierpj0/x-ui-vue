@@ -51,11 +51,13 @@
                     </form-item>
 
                     <form-item field="open1">
-                        <on-off v-model="formData.open1" size="large" :loading="true"></on-off>
+                        <on-off v-model="formData.open1" size="large" :loading="loading1"></on-off>
+                        <Button @click="loading1=!loading1">点击切换loading</Button>
                     </form-item>
 
                     <form-item field="open2">
-                        <on-off v-model="formData.open2" on-text="开" off-text="关" :loading="true"></on-off>
+                        <on-off v-model="formData.open2" on-text="开" off-text="关" :loading="loading2"></on-off>
+                        <Button @click="loading2=!loading2">点击切换loading</Button>
                     </form-item>
 
                     <form-item>
@@ -107,6 +109,8 @@
 
           ,friends:[{required:true,message:'必选111',trigger:'change'}]
         }
+        ,loading1:true
+        ,loading2:false
       }
     }
     ,methods:{
