@@ -51,11 +51,11 @@
                     </form-item>
 
                     <form-item field="open1">
-                        <on-off v-model="formData.open1" size="large"></on-off>
+                        <on-off v-model="formData.open1" size="large" :loading="true"></on-off>
                     </form-item>
 
                     <form-item field="open2">
-                        <on-off v-model="formData.open2" on-text="开" off-text="关" ></on-off>
+                        <on-off v-model="formData.open2" on-text="开" off-text="关" :loading="true"></on-off>
                     </form-item>
 
                     <form-item>
@@ -93,8 +93,8 @@
           ,profile:''
           ,sex:''
           ,friends:[]
-          ,open1:false
-          ,open2:true
+          ,open1:true
+          ,open2:false
         }
         ,rules:{
           username: [{validator:this.validate1,trigger:'blur'},{maxLength:7,message:'太长',trigger:'input'}]

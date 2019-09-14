@@ -118,6 +118,7 @@ $onOff-width-large:56px;
 $innerOnOff-holdWidth-large:$onOff-width-large - $onOff-borderWidth*2 - $onOff-fontSize*2 - $offText-right + 5px;
 $innerOnOff-left-checked-large:$onOff-width-large - $innerOnOff-width - $innerOnOff-left - $onOff-borderWidth * 2;
 $innerOnOff-left-checked-hold-large:$innerOnOff-left-checked-large - ($innerOnOff-holdWidth-large - $innerOnOff-width);
+$onOffLoading-left-checked-large:$onOffLoading-left + ($innerOnOff-left-checked-large - $innerOnOff-left);
 
 .#{$ui-prefix}onOff{
     box-sizing:border-box;
@@ -221,8 +222,13 @@ $innerOnOff-left-checked-hold-large:$innerOnOff-left-checked-large - ($innerOnOf
 
     &.large{
         width:$onOff-width-large;
-        &.checked:after{
-            left:$innerOnOff-left-checked-large;
+        &.checked{
+            &:after{
+                left:$innerOnOff-left-checked-large;
+            }
+            &:before{
+                left:$onOffLoading-left-checked-large;
+            }
         }
         &.hold{
             &:after{
