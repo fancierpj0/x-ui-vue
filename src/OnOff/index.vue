@@ -24,20 +24,24 @@
       }
       ,'on-text':{
         type:String
-        ,default:'On'
+        ,default:'ON'
       }
       ,'off-text':{
         type:String
-        ,default:'Off'
+        ,default:'OFF'
       }
       ,loading:{
         type:Boolean
         ,default:false
       }
+      ,size:{
+        type:String
+        , validator(value) {return ["large", "small"].indexOf(value) >= 0;}
+      }
     }
     ,computed:{
       onOffClass(){
-        return [`${UI_PREFIX}onOff`,{checked:this.value,loading:this.loading}];
+        return [`${UI_PREFIX}onOff`, {checked: this.value, loading: this.loading, large: this.size === 'large'}];
       }
       ,textClass(){
         return `${UI_PREFIX}onOff-text`;
@@ -72,11 +76,17 @@ $onOff-radius:$onOff-Height/2;
 
 
 
+/*
+文字
+*/
 $offText-right:7px;
 $onText-left:$offText-right;
 
 
 
+/*
+小圆圈
+*/
 $innerOnOff-height:$onOff-lineHeight - 2px;
 $innerOnOff-width:$innerOnOff-height;
 $innerOnOff-borderRadius:$innerOnOff-height;
@@ -89,6 +99,9 @@ $innerOnOff-left-checked-hold:$innerOnOff-left-checked - ($innerOnOff-holdWidth 
 
 
 
+/*
+loading
+*/
 $onOffLoading-height:$innerOnOff-height - 4px;
 $onOffLoading-width:$onOffLoading-height;
 $onOffLoading-size:1px;
@@ -98,9 +111,13 @@ $onOffLoading-left-checked:$onOffLoading-left + ($innerOnOff-left-checked - $inn
 
 
 
-
-
-
+/*
+size为large时
+*/
+$onOff-width-large:56px;
+$innerOnOff-holdWidth-large:$onOff-width-large - $onOff-borderWidth*2 - $onOff-fontSize*2 - $offText-right + 5px;
+$innerOnOff-left-checked-large:$onOff-width-large - $innerOnOff-width - $innerOnOff-left - $onOff-borderWidth * 2;
+$innerOnOff-left-checked-hold-large:$innerOnOff-left-checked-large - ($innerOnOff-holdWidth-large - $innerOnOff-width);
 
 .#{$ui-prefix}onOff{
     box-sizing:border-box;
@@ -115,7 +132,7 @@ $onOffLoading-left-checked:$onOffLoading-left + ($innerOnOff-left-checked - $inn
     border-radius: $onOff-radius;
     border: $onOff-borderWidth solid $onOff-borderColor;
 
-    width: 44px;
+    width: $onOff-width;
 
     background-color:$onOff-borderColor;
     transition: all .2s ease-in-out;
@@ -199,6 +216,21 @@ $onOffLoading-left-checked:$onOffLoading-left + ($innerOnOff-left-checked - $inn
         }
         &.checked:after{
             left:$innerOnOff-left-checked-hold;
+        }
+    }
+
+    &.large{
+        width:$onOff-width-large;
+        &.checked:after{
+            left:$innerOnOff-left-checked-large;
+        }
+        &.hold{
+            &:after{
+                width:$innerOnOff-holdWidth-large;
+            }
+            &.checked:after{
+                left:$innerOnOff-left-checked-hold-large;
+            }
         }
     }
 }

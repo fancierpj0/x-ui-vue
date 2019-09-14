@@ -50,6 +50,14 @@
                         </checkbox-group>
                     </form-item>
 
+                    <form-item field="open1">
+                        <on-off v-model="formData.open1" size="large"></on-off>
+                    </form-item>
+
+                    <form-item field="open2">
+                        <on-off v-model="formData.open2" on-text="开" off-text="关" ></on-off>
+                    </form-item>
+
                     <form-item>
                         <Button tag-type="button">提交</Button>
                     </form-item>
@@ -69,13 +77,14 @@
   import Checkbox from '../Checkbox';
   import CheckboxGroup from '../Checkbox/CheckboxGroup';
   import Button from '../Button';
+  import OnOff from '../OnOff';
 
   const username = ['ahhh111','ahhh123','ahhh234'];
   const passwd = 123456;
 
   export default {
     name: "Example"
-    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup,Button}
+    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup,Button,OnOff}
     ,data(){
       return {
         formData:{
@@ -84,6 +93,8 @@
           ,profile:''
           ,sex:''
           ,friends:[]
+          ,open1:false
+          ,open2:true
         }
         ,rules:{
           username: [{validator:this.validate1,trigger:'blur'},{maxLength:7,message:'太长',trigger:'input'}]
