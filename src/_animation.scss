@@ -4,6 +4,6 @@
   100% { transform: rotate(360deg); }
 }
 
-@mixin spin{
-  animation:spin 2s infinite linear;
+@mixin spin($speed:2s){
+  animation:spin #{$speed} infinite linear;
 }

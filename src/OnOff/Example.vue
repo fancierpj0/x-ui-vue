@@ -1,6 +1,6 @@
 <template>
     <div class="example">
-        <h2>Textarea Example</h2>
+        <h2>Switch Example</h2>
 
         <div style="height:1em;background: #4a90e2;"></div>
 
@@ -8,21 +8,22 @@
             <p></p>
             <div>
                 {{value1}}
-                <Textarea v-model="value1"/>
+                <on-off v-model="value1" on-text="开" off-text="关" :loading="loading"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-  import Textarea from './index';
+  import OnOff from './index';
   export default {
     name: "Example"
-    ,components:{Textarea}
+    ,components:{OnOff}
     ,data(){
       return {
-        value1:''
-      }
+        value1: true
+        ,loading:false
+      };
     }
   }
 </script>

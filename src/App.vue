@@ -77,9 +77,12 @@
                   <nav-item name="radio">
                     <router-link to="/radio">Radio</router-link>
                   </nav-item>
-                    <nav-item name="checkbox">
-                        <router-link to="/checkbox">Checkbox</router-link>
-                    </nav-item>
+                  <nav-item name="checkbox">
+                    <router-link to="/checkbox">Checkbox</router-link>
+                  </nav-item>
+                  <nav-item name="onoff">
+                    <router-link to="/onoff">OnOff</router-link>
+                  </nav-item>
                   <nav-item name="form">
                     <router-link to="/form">Form</router-link>
                   </nav-item>

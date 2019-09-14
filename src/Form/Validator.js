@@ -1,3 +1,8 @@
+/*
+TODO 当验证singleField 且 returnAllErrors为false时 若有多个异步验证有错 应该取最先返回的那个
+这里选择的是promise.all获取到的有效(有error)中的[0]个，而它并不一定是最先返回的
+但这样也有好处，这样在[{rule1},{rule2}]中排在前面的那个若有错就会优先显示它，这样也便于用户自己抉择，但实际上这并不是最佳的用户体验
+*/
 import {isEmpty} from "../util";
 
 class Validator {

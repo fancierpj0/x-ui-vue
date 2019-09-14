@@ -1,6 +1,6 @@
 <template>
     <div class="example">
-        <h2>Form Example</h2>
+        <h2>Radio Example</h2>
 
         <div style="height:1em;background: #4a90e2;"></div>
 
