@@ -68,6 +68,9 @@
                 <!--数据录入-->
                 <sub-nav name="dataInput">
                   <template slot="title">数据录入</template>
+                  <nav-item name="cascader">
+                    <router-link to="/cascader">Cascader</router-link>
+                  </nav-item>
                   <nav-item name="input">
                     <router-link to="/input">Input</router-link>
                   </nav-item>
@@ -83,6 +86,9 @@
                   <nav-item name="onoff">
                     <router-link to="/onoff">OnOff</router-link>
                   </nav-item>
+                  <nav-item name="select">
+                    <router-link to="/select">Select</router-link>
+                  </nav-item>
                   <nav-item name="form">
                     <router-link to="/form">Form</router-link>
                   </nav-item>
@@ -95,9 +101,6 @@
                   </nav-item>
                   <nav-item name="slide">
                     <router-link to="/slide">Slide</router-link>
-                  </nav-item>
-                  <nav-item name="cascader">
-                    <router-link to="/cascader">Cascader</router-link>
                   </nav-item>
                   <nav-item name="table">
                     <router-link to="/table">Table</router-link>

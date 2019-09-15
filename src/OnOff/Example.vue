@@ -1,6 +1,6 @@
 <template>
     <div class="example">
-        <h2>Switch Example</h2>
+        <h2>OnOff Example</h2>
 
         <div style="height:1em;background: #4a90e2;"></div>
 

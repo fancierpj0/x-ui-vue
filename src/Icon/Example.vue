@@ -6,7 +6,9 @@
     <hr>
     <div>
         <p>显示svg图标</p>
-        <Icon name="loading"></Icon>
+        <div>
+            <Icon name="loading"></Icon>
+        </div>
     </div>
 
     <hr>

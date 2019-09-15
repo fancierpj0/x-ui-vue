@@ -55,3 +55,10 @@ console.log(fn instanceof Promise)
 Promise.reject({key:'username',msg:'重复'}).then(null,(err)=>{
   console.log(err);
 })
+
+let x = [1, 2, 2, 2,1];
+x.forEach((item, index) => {
+  if (item === 2) x.splice(index, 1);
+});
+const r = x.filter(item => item !== 2);
+console.log('r:',r);

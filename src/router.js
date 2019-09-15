@@ -21,6 +21,7 @@ import TextareaExample from './Textarea/Example'
 import RadioExample from './Radio/Example'
 import CheckboxExample from './Checkbox/Example'
 import OnOffExample from './OnOff/Example'
+import SelectExample from './Select/Example'
 
 
 Vue.use(Router);
@@ -50,5 +51,6 @@ export default new Router({
     ,{path: '/radio', name: 'radio', component: RadioExample}
     ,{path: '/checkbox', name: 'checkbox', component: CheckboxExample}
     ,{path: '/onoff', name: 'onoff', component: OnOffExample}
+    ,{path: '/select', name: 'select', component: SelectExample}
   ]
 })
