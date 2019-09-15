@@ -1,7 +1,3 @@
-<!--
-TODO 动画
-click outside
--->
 <template>
     <div :class="selectClass"  v-click-outside="close">
         <div :class="inputContainerClass" @click="onClick" tabindex="0">
@@ -11,11 +7,13 @@ click outside
                 <Icon name="right"></Icon>
             </div>
         </div>
-        <div :class="dropdownListClass" v-if="open">
-            <ul>
-                <slot></slot>
-            </ul>
-        </div>
+        <transition :name="transitionName">
+            <div :class="dropdownListClass" v-if="open">
+                <ul>
+                    <slot></slot>
+                </ul>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -55,6 +53,9 @@ click outside
       ,dropdownListClass(){
         return `${this.selectClass}-dropdownList`
       }
+      ,transitionName(){
+        return `${UI_PREFIX}Select-dropdownList`
+      }
     }
     ,methods:{
       onClick(){
@@ -69,6 +70,14 @@ click outside
 
 <style lang="scss">
 @import '../var';
+
+.#{$ui-prefix}Select-dropdownList-enter-active,.#{$ui-prefix}Select-dropdownList-leave-active{
+    transition:all 250ms;
+}
+.#{$ui-prefix}Select-dropdownList-enter,.#{$ui-prefix}Select-dropdownList-leave-to{
+    transform: scaleY(.7);
+    opacity: 0;
+}
 
 .#{$ui-prefix}select{
     display:inline-block;
@@ -126,6 +135,8 @@ click outside
         box-shadow: 0 1px 6px fade_out(#000, 0.8);
         border-radius: $border-radius;
         padding:5px 0;
+
+        transform-origin: top left;
     }
 }
 </style>
