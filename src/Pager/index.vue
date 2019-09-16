@@ -78,7 +78,7 @@
     @import "../var";
     $width: 20px;
     $height: 20px;
-    $font-size: 12px;
+    $fontSize: 12px;
 
     .#{$ui-prefix}pager {
         display: flex;
@@ -91,7 +91,7 @@
         &-item {
             display: inline-flex;justify-content: center;align-items: center;
 
-            font-size: 12px;
+            font-size: $fontSize;
             min-width: 20px;
             height: 20px;
             padding: 0 8px;
@@ -111,7 +111,7 @@
         &-prev,&-next {
             display: inline-flex;justify-content: center;align-items: center;
 
-            font-size:12px;
+            font-size:$fontSize;
             color:$color-light;
             height: $height;
             margin: 0 4px;

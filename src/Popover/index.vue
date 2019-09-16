@@ -212,7 +212,7 @@ export default {
 
 <style lang="scss">
 @import '../var';
-$content-wrapper-border-color:$borderColor;
+$content-wrapper-border-color:$borderColor-light;
 $content-wrapper-border-radius:$borderRadius;
 $content-wrapper-border-width:1px;
 $content-wrapper-offset:10px;
@@ -228,7 +228,7 @@ $content-wrapper-triangle-offset:7px;
       position: fixed; //在存在滚动条的情况下，比使用fixed好
       border: $content-wrapper-border-width solid $content-wrapper-border-color;
       border-radius: $content-wrapper-border-radius;
-      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5)); // box-shadow的话三角形就没有阴影了
+      filter: drop-shadow(0 1px 1px fade_out(#000, 0.8)); // box-shadow的话三角形就没有阴影了
       background: white;
       padding: 0.5em 1em;
       word-break: break-all;

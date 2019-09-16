@@ -186,8 +186,8 @@ $footerHeight:21px;
 #app {
   text-align: center;
   color: $color;
-  font-size: $font-size;
-  line-height: $line-height;
+  font-size: $fontSize;
+  line-height: $lineHeight;
 }
 
 .page-wrapper{

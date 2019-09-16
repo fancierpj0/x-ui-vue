@@ -77,8 +77,8 @@
 
 <style lang="scss">
     @import "../var";
-    $toast-font-size: $font-size;
-    $toast-line-height: $line-height;
+    $toast-font-size: $fontSize;
+    $toast-line-height: $lineHeight;
     $toast-min-height: 40px;
     $toast-border-radius: $borderRadius;
     $toast-bg: rgba(0, 0, 0, .75);
