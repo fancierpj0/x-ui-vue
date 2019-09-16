@@ -100,8 +100,11 @@
 
 .#{$ui-prefix}select{
     display:inline-block;
-    vertical-align: center;
+    vertical-align: middle;
+    display:inline-flex;
+    align-items: center;
     position:relative;
+
     user-select:none;
 
     ul {margin: 0;padding: 0;}

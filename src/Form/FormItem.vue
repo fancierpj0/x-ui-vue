@@ -114,10 +114,17 @@
 <style lang="scss">
 @import '../var';
 .#{$ui-prefix}formItem{
+    margin-bottom:24px;
+
     &-errorBox{
         display:flex;
         align-items: center;
         justify-content: center;
+        position:absolute;
+        width:100%;
+        line-height:24px;
+        font-size:12px;
+
         &-errorIcon {
             fill: $red;
             margin-right:.5em;

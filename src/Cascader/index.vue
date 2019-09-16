@@ -126,6 +126,9 @@
 
 .#{$ui-prefix}cascader {
     display:inline-block;
+    vertical-align: middle;
+    display:inline-flex;
+    align-items: center;
     position: relative;
 
     &-trigger {

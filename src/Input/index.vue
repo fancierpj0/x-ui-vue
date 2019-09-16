@@ -74,7 +74,9 @@ export default {
 @import '../shape';
 
 .#{$ui-prefix}inputWrapper {
-  display: inline-flex;
+  display:inline-block;
+  vertical-align: middle;
+  display:inline-flex;
   align-items: center;
 
   > :not(:last-child) {

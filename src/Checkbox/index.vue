@@ -105,6 +105,8 @@ $checkboxDiameter-large:16px;
 $checkboxDiameter-small:12px;
 
 .#{$ui-prefix}checkboxWrapper {
+  display:inline-block;
+  vertical-align: middle;
   display: inline-flex;
   align-items: center;
   margin-right: 8px;

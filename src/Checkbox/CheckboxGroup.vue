@@ -61,8 +61,9 @@
 <style lang="scss">
 @import '../var';
 .#{$ui-prefix}checkboxGroup{
-    display: flex;
-    flex-wrap: nowrap;
+    display:inline-block;
+    vertical-align: middle;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
 }

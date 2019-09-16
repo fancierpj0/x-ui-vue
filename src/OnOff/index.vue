@@ -150,7 +150,10 @@ $onOffLoading-left-checked-small:$onOffLoading-left-small + ($innerOnOff-left-ch
     box-sizing:border-box;
     display:inline-block;
     vertical-align: middle;
+    display:inline-flex;
+    align-items: center;
     position: relative;
+
     cursor: pointer;
     user-select: none;
 

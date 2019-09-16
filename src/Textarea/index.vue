@@ -75,7 +75,9 @@ export default {
 @import "../shape";
 
 .#{$ui-prefix}textareaWrapper {
-  display: inline-flex;
+  display:inline-block;
+  vertical-align: middle;
+  display:inline-flex;
   align-items: center;
 
   > :not(:last-child) {

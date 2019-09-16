@@ -114,6 +114,8 @@ $innerRadioLeft-small:($radioDiameter-small - $radioBorderWidth*2 - $innerRadioD
 $innerRadioTop-small:$innerRadioLeft-small;
 
 .#{$ui-prefix}radioWrapper {
+  display:inline-block;
+  vertical-align: middle;
   display: inline-flex;
   align-items: center;
   margin-right: 8px;
