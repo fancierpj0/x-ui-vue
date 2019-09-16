@@ -242,7 +242,7 @@ export default {
 @import "../var";
 @import "../animation";
 
-$border-color:rgb(232,232,232);
+$borderColor:rgb(232,232,232);
 $table-bgColor:#fff;
 $tr-bgLightColor:#fff;
 $tr-bgDarkColor:rgb(250,250,250);
@@ -293,15 +293,15 @@ $tr-bgDarkColor:rgb(250,250,250);
       }*/
 
       td, th {
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid $borderColor;
         text-align: left;
         padding: 8px;
       }
 
       &.bordered {
-        border: 1px solid $border-color;
+        border: 1px solid $borderColor;
         td, th {
-          border: 1px solid $border-color;
+          border: 1px solid $borderColor;
         }
       }
 

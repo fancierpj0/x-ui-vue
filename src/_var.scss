@@ -1,19 +1,22 @@
 $ui-prefix:'xui-';
 
 
-$border-radius: 4px;
+$borderRadius: 4px;
 
 /* === Color === */
 $red: #F1453D;
 $grey:#eee;
 $blue:#4a90e2;
 
-$border-color: #999;
-$border-color-light: lighten($border-color,30%);
-$border-color-hover: #666;
+$borderColor: #999;
+$borderColor-light: lighten($borderColor,30%);
+$borderColor-hover: #666;
 
 $box-shadow-color: rgba(0, 0, 0, 0.5);
 
+$color: #333;
+$color-light:#666;
+$color-disabled:#bbb;
 
 
 
@@ -27,21 +30,7 @@ chrome(pc)最小支持的font-size为12px
 $min-font-size:12px;
 $font-size: 14px;
 $line-height: 1.4286;
-$color: #333;
-$light-color:#666;
-$disabled-text-color:#bbb;
 
-
-
-
-
-/* === Button
-
-以下Button 和 ButtonGroup 都会用到
-
-=== */
-$button-border-width:1px;
-$button-border-radius:$border-radius;
 
 
 
@@ -59,3 +48,34 @@ $bpList: (
   pc-: 992px,
   widePc-: 1200px
 ) !default;
+
+
+
+
+/* === Input Shape 默认值 === */
+$input-borderColor:$borderColor-light;
+$input-color:$color-light;
+$input-borderRadius:$borderRadius;
+$input-borderColor-hover:$blue;
+$input-color-disabled:$color-disabled;
+$input-borderColor-error:$red;
+$input-shadowColor:$blue;
+$input-shadowColor-error:$red;
+
+$input-differentSizeMap:(
+  default:(fontSize:12px,lineHeight:22px,paddingV:4px)
+  ,small:(fontSize:12px,lineHeight:20px,paddingV:1px)
+  ,large:(fontSize:14px,lineHeight:22px,paddingV:6px)
+);
+
+
+
+
+/* === Button
+
+以下Button 和 ButtonGroup 都会用到
+
+=== */
+$button-borderWidth:1px;
+$button-borderRadius:$borderRadius;
+$button-color-hover:$blue;

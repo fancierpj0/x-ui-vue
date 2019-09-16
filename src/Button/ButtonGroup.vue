@@ -9,9 +9,18 @@
 
   export default {
     name: "ButtonGroup"
+    ,props:{
+        size: {type: String, default: "default",
+            validator(value) {return ["large", "small", "default"].indexOf(value) >= 0;}}
+    }
     ,computed:{
       buttonClass(){
         return `${UI_PREFIX}buttonGroup`
+      }
+    }
+    ,provide(){
+      return {
+        buttonGroupSize:this.size
       }
     }
     ,mounted() {
@@ -38,17 +47,17 @@
         > .#{$ui-prefix}button{
             border-radius:0;
             &:not(:first-child){
-                margin-left:-$button-border-width;
+                margin-left:-$button-borderWidth;
             }
             &:first-child{
-                border-top-left-radius: $button-border-radius;
-                border-bottom-left-radius: $button-border-radius;
+                border-top-left-radius: $button-borderRadius;
+                border-bottom-left-radius: $button-borderRadius;
             }
             &:last-child{
-                border-top-right-radius: $button-border-radius;
-                border-bottom-right-radius: $button-border-radius;
+                border-top-right-radius: $button-borderRadius;
+                border-bottom-right-radius: $button-borderRadius;
             }
-            &:hover {
+            &:hover,&:focus {
                 position: relative;
                 z-index: 1;
             }

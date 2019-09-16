@@ -38,7 +38,7 @@ const fn = (a,b,c)=>{
 }
 fn(...[1, 2, 3]);*/
 
-let arr = [1,2,3];
+/*let arr = [1,2,3];
 console.log(JSON.parse(JSON.stringify(arr))===arr);
 
 let fn = ()=>{}
@@ -61,4 +61,12 @@ x.forEach((item, index) => {
   if (item === 2) x.splice(index, 1);
 });
 const r = x.filter(item => item !== 2);
-console.log('r:',r);
+console.log('r:',r);*/
+let i =5;
+if(i===-1){
+  console.log(1)
+}else if(i>3){
+  console.log(2)
+}else if(i>4){
+  console.log(3);
+}

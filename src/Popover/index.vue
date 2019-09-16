@@ -212,8 +212,8 @@ export default {
 
 <style lang="scss">
 @import '../var';
-$content-wrapper-border-color:$border-color;
-$content-wrapper-border-radius:$border-radius;
+$content-wrapper-border-color:$borderColor;
+$content-wrapper-border-radius:$borderRadius;
 $content-wrapper-border-width:1px;
 $content-wrapper-offset:10px;
 $content-wrapper-triangle-size:14px;

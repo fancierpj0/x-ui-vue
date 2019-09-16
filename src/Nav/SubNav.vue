@@ -169,7 +169,7 @@ export default {
       transition: transform 0.25s;
       svg {
         font-size:.5em;
-        fill: $light-color;
+        fill: $color-light;
       }
       &.open {
         transform: rotate(180deg);
@@ -189,14 +189,14 @@ export default {
   &-popover {
     background: #fff;
     box-shadow: 0 0 3px fade_out(black, 0.7);
-    border-radius: $border-radius;
+    border-radius: $borderRadius;
     position: absolute;
     top: 100%;
     left: 0;
     margin-top: 4px;
     white-space: nowrap;
     /*min-width: 6em;*/
-    color: $light-color;
+    color: $color-light;
 
     transition:height 250ms;
     &.vertical {

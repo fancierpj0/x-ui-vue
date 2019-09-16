@@ -1,6 +1,6 @@
 <template>
   <div :class="inputWrapperClass">
-    <input
+    <input :class="inputClass"
       type="text"
       :value="value"
       :disabled="disabled"
@@ -32,6 +32,8 @@ export default {
     value: {type: [String,Date]}
     ,disabled: {type: Boolean, default: false}
     ,readonly: {type: Boolean, default: false}
+    ,size:{type: String, default: 'default'
+      , validator(value) {return ["large", "small", "default"].indexOf(value) >= 0;}}
   }
   ,data(){
     return {
@@ -40,7 +42,10 @@ export default {
   }
   ,computed:{
     inputWrapperClass(){
-      return [`${UI_PREFIX}inputWrapper`,{error:this.error}];
+      return `${UI_PREFIX}inputWrapper`;
+    }
+    ,inputClass(){
+      return [`${UI_PREFIX}inputWrapper-input`, {error: this.error, small: this.size === 'small', large: this.size === 'large'}];
     }
   }
   ,methods:{
@@ -66,12 +71,7 @@ export default {
 
 <style lang="scss" >
 @import '../var';
-
-$input-font-size:$font-size;
-$input-line-height:$line-height;
-$input-border:1px solid $border-color;
-$input-border-radius:$border-radius;
-$errorColor: $red;
+@import '../shape';
 
 .#{$ui-prefix}inputWrapper {
   display: inline-flex;
@@ -80,47 +80,9 @@ $errorColor: $red;
   > :not(:last-child) {
     margin-right: 0.5em;
   }
-  > input {
-    border: $input-border;
-    border-radius: $input-border-radius;
-    padding: 5px 1em;
-    font-size: $input-font-size;
-    line-height:$input-line-height; // input的line-height并不会继承父元素的而是normal，这个值和浏览器和字体有关
-    color:$color;
-    transition:box-shadow .2s ease-in-out,border .2s ease-in-out;
-    box-shadow: 0 0 0 2px fade_out($blue, 1);
 
-    &:hover {
-      border-color: $blue;
-    }
-
-    &:focus {
-      border-color:$blue;
-      box-shadow: 0 0 0 2px fade_out($blue, 0.7);
-      outline: none;
-    }
-
-    &[disabled],
-    &[readonly] {
-      border-color:$disabled-text-color;
-      color:$disabled-text-color;
-      cursor: not-allowed;
-    }
-  }
-
-  &.error {
-    > input {
-      border-color: $errorColor;
-      box-shadow: 0 0 0 2px fade_out($red, 1);
-      &:hover{
-        border-color:$red;
-      }
-      &:focus{
-        border-color:$red;
-        box-shadow: 0 0 0 2px fade_out($red, 0.7);
-        outline: none;
-      }
-    }
+  &-input {
+    @include differentSizeInput();
   }
 
 }

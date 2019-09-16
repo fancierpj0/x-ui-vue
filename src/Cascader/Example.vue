@@ -6,6 +6,9 @@
         <div>
             <p></p>
             <div>
+                <div>
+                    {{selectedCity1}}
+                </div>
                 <Cascader :source.sync="source1" popoverHeight="200px" :selected.sync="selectedCity1" ></Cascader>
                 <!--{{selectedCity1}}-->
             </div>
@@ -15,7 +18,10 @@
         <div>
             <p></p>
             <div>
-                <Cascader :source.sync="source2" :selected.sync="selectedCity2" :load-data="loadData" popoverHeight="200px"></Cascader>
+                <div>
+                    {{selectedCity2}}
+                </div>
+                <Cascader :source.sync="source2" :selected.sync="selectedCity2" :load-data="loadData" popoverHeight="200px" size="large"></Cascader>
                 <!--{{selectedCity2}}-->
             </div>
         </div>
@@ -42,6 +48,7 @@
   export default {
     name: "Example"
     ,components: {Cascader,CascaderItem}
+
     ,data(){
       return {
         source1:[{

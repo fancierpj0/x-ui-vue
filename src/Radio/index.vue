@@ -106,7 +106,7 @@ $innerRadioTop:$innerRadioLeft;
   cursor: pointer;
 
   &:hover &-radioContainer-fakeRadio:not(.checked){
-    border-color:$border-color-hover;
+    border-color:$borderColor-hover;
   }
 
   &-radioContainer {
@@ -128,7 +128,7 @@ $innerRadioTop:$innerRadioLeft;
       width:$radioDiameter;
       height:$radioDiameter;
       position:relative;
-      border:$radioBorderWidth solid $border-color;
+      border:$radioBorderWidth solid $borderColor;
       border-radius:50%;
       transition:all .2s ease-in-out;
 

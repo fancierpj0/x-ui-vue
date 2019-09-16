@@ -37,12 +37,12 @@
 <style lang="scss">
     @import '../var';
     $tab-head-height:40px;
-    $tab-head-border-color:$border-color;
+    $tab-head-border-color:$borderColor;
     $tab-head-border-width:1px;
     $tab-head-line-thickness:2px;
     .#{$ui-prefix}tab-head{
         height:$tab-head-height;
-        border-bottom:$tab-head-border-width solid $border-color;
+        border-bottom:$tab-head-border-width solid $borderColor;
         display:flex;
         justify-content: flex-start;
         align-items:center;

@@ -139,7 +139,7 @@
         }
         &-right {
             height: 100%;
-            border-left: 1px solid $border-color-light;
+            border-left: 1px solid $borderColor-light;
             overflow: auto;
         }
     }

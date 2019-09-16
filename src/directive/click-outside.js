@@ -13,7 +13,7 @@ export default {
     // 一个页面中 可能会有很多个组件都共用这个指令
     // console.log(vnode);
     callbacks.push({el,callback:binding.value});
-    console.log('callbacks:',callbacks);
+    // console.log('callbacks:',callbacks);
   }
   ,unbind:function(el){
     callbacks = callbacks.filter(item => item.el !== el);

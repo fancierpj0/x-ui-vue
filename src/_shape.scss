@@ -1,3 +1,6 @@
+@import "./var";
+@import './animation';
+
 @mixin triangle($direction, $size, $color) {
   width: 0;
   height: 0;
@@ -37,10 +40,122 @@
   }
 }
 
+
+
 @mixin bottomLine($size:2px,$color,$containerBorderWidth:1px){
   position:absolute;
   bottom:-$containerBorderWidth;
   left:0;
   border-bottom:$size solid $color;
   width: 100%;
+}
+
+
+
+@mixin input(
+$fontSize
+,$lineHeight
+,$paddingV
+,$borderColor:$input-borderColor
+,$color:$input-color
+,$borderRadius:$input-borderRadius
+,$borderColor-hover:$input-borderColor-hover
+,$color-disabled:$input-color-disabled
+,$borderColor-error:$input-borderColor-error){
+  font-size: $fontSize;
+  line-height:$lineHeight; // input的line-height并不会继承父元素的而是normal，这个值和浏览器和字体有关
+  padding: $paddingV .5em;
+  border: 1px solid $borderColor;
+
+  text-align: initial;
+
+  color:$color;
+  border-radius:$borderRadius;
+  box-shadow: 0 0 0 2px fade_out($borderColor-hover, 1);
+
+  transition:box-shadow .2s ease-in-out,border .2s ease-in-out;
+
+  &:hover {
+    border-color: $borderColor-hover;
+  }
+
+  &:focus {
+    border-color:$borderColor-hover;
+    box-shadow: 0 0 0 2px fade_out($borderColor-hover, 0.7);
+    outline: none;
+  }
+
+  &[disabled],
+  &[readonly] {
+    border-color:$color-disabled;
+    color:$color-disabled;
+    cursor: not-allowed;
+  }
+
+  &.error{
+    border-color: $borderColor-error;
+    box-shadow: 0 0 0 2px fade_out($borderColor-error, 1);
+
+    &:hover{
+      border-color:$borderColor-error;
+    }
+    &:focus{
+      border-color:$borderColor-error;
+      box-shadow: 0 0 0 2px fade_out($borderColor-error, 0.7);
+      outline: none;
+    }
+  }
+}
+
+@mixin differentSizeInput($differentSizeMap:$input-differentSizeMap) {
+
+  @each $sizeType,$sizeMap in $differentSizeMap {
+    //@debug $sizeType,$sizeMap;
+    @if $sizeType == default{
+      @include input($sizeMap...);
+
+    }@else{
+      &.#{$sizeType}{
+        @each $k,$v in $sizeMap{
+          //@debug $k,$v;
+          @if($k == fontSize){
+            font-size:$v;
+          }@else if($k == lineHeight){
+            line-height:$v;
+          }@else if($k == paddingV){
+            padding-top:$v;
+            padding-bottom:$v;
+          }
+        }
+      }
+    }
+  }
+
+  @content
+}
+
+@mixin differentSizeSelect(
+$shadowColor:$input-shadowColor
+,$shadowColor-error:$input-shadowColor-error){
+  @include differentSizeInput() {
+    &:focus, &.error:focus {
+      outline: none;
+      border-color: $shadowColor;
+      box-shadow: 0 0 0 2px fade_out($shadowColor, 1);
+    }
+
+    &.error:focus {
+      border-color: $shadowColor-error;
+      box-shadow: 0 0 0 2px fade_out($shadowColor-error, 1);
+    }
+
+    &.open:focus, &.open.error:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px fade_out($shadowColor, 0.7);
+    }
+
+    &.open.error:focus {
+      box-shadow: 0 0 0 2px fade_out($shadowColor-error, 0.7);
+    }
+  }
 }

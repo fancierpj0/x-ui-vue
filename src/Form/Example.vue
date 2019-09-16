@@ -13,7 +13,15 @@
                     :formData="formData"
                     :rules="rules"
                 >
+                    <form-item field="selectValue">
+                        <Select v-model="formData.selectValue" size="large">
+                            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </form-item>
 
+                    <form-item field="cascaderValue">
+                        <Cascader :source.sync="cascaderSource" v-model="formData.cascaderValue" :load-data="loadData" popoverHeight="200px" size="large"></Cascader>
+                    </form-item>
                     <!--
                         ahhh123 -> errors (2) ["名字重复咯~~", "太长"]
                         会显示  名字重复咯~~
@@ -26,11 +34,11 @@
                     </form-item>
 
                     <form-item field="password" label="">
-                        <Input type="text" v-model="formData.password" />
+                        <Input type="text" v-model="formData.password" size="large"/>
                     </form-item>
 
                     <form-item field="profile" label="">
-                        <Textarea type="text" v-model="formData.profile" />
+                        <Textarea type="text" v-model="formData.profile" size="large" />
                     </form-item>
 
                     <form-item field="sex">
@@ -60,6 +68,7 @@
                         <Button @click="loading2=!loading2">点击切换loading</Button>
                     </form-item>
 
+
                     <form-item>
                         <Button tag-type="button">提交</Button>
                     </form-item>
@@ -80,13 +89,30 @@
   import CheckboxGroup from '../Checkbox/CheckboxGroup';
   import Button from '../Button';
   import OnOff from '../OnOff';
+  import Select from '../Select';
+  import Option from '../Select/Option';
+  import Cascader from '../Cascader';
+
+  import db from '../db';
 
   const username = ['ahhh111','ahhh123','ahhh234'];
   const passwd = 123456;
 
+  function ajaxRequest(pid = 0) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        let result = db.filter((item) => item.parent_id === pid);
+        result.forEach(node => {
+          node.isLeaf = db.filter(item => item.parent_id === node.id).length <= 0;
+        });
+        resolve(result);
+      }, 2000);
+    });
+  }
+
   export default {
     name: "Example"
-    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup,Button,OnOff}
+    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup,Button,OnOff,Select,Option,Cascader}
     ,data(){
       return {
         formData:{
@@ -97,6 +123,8 @@
           ,friends:[]
           ,open1:true
           ,open2:false
+          ,selectValue:''
+          ,cascaderValue:[]
         }
         ,rules:{
           username: [{validator:this.validate1,trigger:'blur'},{maxLength:7,message:'太长',trigger:'input'}]
@@ -108,10 +136,47 @@
           ,sex:[{required:true,message:'必选',trigger:'change'}]
 
           ,friends:[{required:true,message:'必选111',trigger:'change'}]
+
+          ,selectValue:[{required:true,message:'必选222',trigger:'change'}]
+          ,cascaderValue:[{required:true,message:'必选333',trigger:'change'}]
         }
         ,loading1:true
         ,loading2:false
+        ,cityList: [
+          {
+            value: 'New York',
+            label: 'New York'
+          },
+          {
+            value: 'London',
+            label: 'London'
+          },
+          {
+            value: 'Sydney',
+            label: 'Sydney'
+          },
+          {
+            value: 'Ottawa',
+            label: 'Ottawa'
+          },
+          {
+            value: 'Paris',
+            label: 'Paris'
+          },
+          {
+            value: 'Canberra',
+            label: 'Canberra'
+          }
+        ]
+        ,cascaderSource:[]
       }
+    }
+    , created() {
+      //↓级联
+      //动态需要加上
+      ajaxRequest(0).then((result) => {
+        this.cascaderSource = result;
+      });
     }
     ,methods:{
       onSubmit(e){
@@ -138,6 +203,12 @@
               reject('密码不正确~~')
             }
           }, 2000);
+        });
+      }
+      ,loadData(node, callback) {
+        let {name, id, parent_id} = node;
+        ajaxRequest(id).then(result => {
+          if (result.length > 0) callback(result); //this.$emit('update:source', copy);
         });
       }
     }

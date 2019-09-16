@@ -103,7 +103,7 @@ $checkboxBorderWidth:1px;
   cursor: pointer;
 
   &:hover &-checkboxContainer-fakeCheckbox:not(.checked){
-    border-color:$border-color-hover;
+    border-color:$borderColor-hover;
   }
 
   &-checkboxContainer {
@@ -125,7 +125,7 @@ $checkboxBorderWidth:1px;
       width: $checkboxDiameter;
       height: $checkboxDiameter;
       position: relative;
-      border: $checkboxBorderWidth solid $border-color;
+      border: $checkboxBorderWidth solid $borderColor;
       border-radius: 2px;
       transition: all .2s ease-in-out;
 

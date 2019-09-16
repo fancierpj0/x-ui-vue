@@ -46,7 +46,7 @@
 <style lang="scss">
     @import '../var';
     $grey: #ddd;
-    $border-radius: 4px;
+
     .#{$ui-prefix}collapseItem {
         &-title {
             display: flex;
@@ -60,14 +60,14 @@
         }
         &:first-child {
             > .#{$ui-prefix}collapseItem-title {
-                border-top-left-radius: $border-radius;
-                border-top-right-radius: $border-radius;
+                border-top-left-radius: $borderRadius;
+                border-top-right-radius: $borderRadius;
             }
         }
         &:last-child {
             > .#{$ui-prefix}collapseItem-title:last-child { //:last-child，意思是最后一个要不展开，这里才会生效
-                border-bottom-left-radius: $border-radius;
-                border-bottom-right-radius: $border-radius
+                border-bottom-left-radius: $borderRadius;
+                border-bottom-right-radius: $borderRadius
             }
         }
         &-content { padding: 8px; }

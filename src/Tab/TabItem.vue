@@ -76,10 +76,10 @@
             /*font-weight:bold; // 会影响item占据的宽度，从而影响后续元素的站位*/
         }
         &.disabled {
-            color: $disabled-text-color;
+            color: $color-disabled;
             cursor:not-allowed;
             svg {
-                fill: $disabled-text-color;
+                fill: $color-disabled;
             }
         }
     }

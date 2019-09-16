@@ -1,6 +1,6 @@
 <template>
     <div :class="cascaderClass" ref="cascader" v-click-outside="close">
-        <div :class="triggerClass" @click="toggle">
+        <div :class="triggerClass" @click="toggle" tabindex="0">
             {{this.result||'&nbsp;'}}
         </div>
         <div :class="popoverClass" v-if="popoverVisible">
@@ -19,13 +19,18 @@
 <script>
   import CascaderItems from './CascaderItem';
   import ClickOutside from '../directive/click-outside';
-  import {UI_PREFIX} from "../constant";
+  import {FORM_EVENTBUS, UI_PREFIX} from "../constant";
   import {findInDeepByField} from "../util";
 
   export default {
     name: "Cascader"
     , components: {CascaderItems}
     ,directives:{ClickOutside}
+    ,model:{prop:'selected',event:'change'}
+    ,inject: {
+      [FORM_EVENTBUS]: { from: FORM_EVENTBUS, default: null }
+      ,field: { from: "field", default: null }
+    }
     , props: {
       /*
         source中每一项长这样:
@@ -38,17 +43,20 @@
 
       , loadData: {type: Function} //
       , popoverHeight: {type: String}
+      , size: {type: String, default: "default",
+        validator(value) {return ["large", "small", "default"].indexOf(value) >= 0;}}
     }
     , data() {
       return {
         popoverVisible: false
         ,loadingList:[]
+        ,error:false
       }
     }
     , computed: {
       cascaderClass(){return `${UI_PREFIX}cascader`;}
       ,popoverClass(){return `${this.cascaderClass}-popover`;}
-      ,triggerClass(){return `${this.cascaderClass}-trigger`;}
+      ,triggerClass(){return [`${this.cascaderClass}-trigger`,{error: this.error, small: this.size === "small", large: this.size === "large",open:this.popoverVisible}];}
       ,result() {
         return this.selected.map(item => item.name).join('/')
       }
@@ -80,7 +88,8 @@
         ,这个newSelected是从本组件(Cascader)传递到CascaderItem后经过copy并处理后返回的新selected
       */
       ,onUpdateSelected(newSelected) {
-        this.$emit('update:selected', newSelected);
+        this.$emit('change', newSelected);
+        this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'change');
 
         if(!this.loadData) return;
 
@@ -112,33 +121,28 @@
 </script>
 
 <style lang="scss">
-    @import "../var";
-    $trigger-font-size:$font-size;
-    $trigger-line-height:$line-height;
-    .#{$ui-prefix}cascader {
-        display:inline-block;
-        position: relative;
+@import "../var";
+@import '../shape';
 
-        &-trigger {
-            display: inline-flex;
-            align-items: center;
-            min-width: 10em;
-            border: 1px solid $border-color;
-            border-radius: $border-radius;
-            padding: .5em 1em;
-            font-size: $trigger-font-size;
-            line-height:$trigger-line-height;
-        }
+.#{$ui-prefix}cascader {
+    display:inline-block;
+    position: relative;
 
-        &-popover {
-            /*display:flex;*/
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 4px;
-            background: #fff;
-            z-index:1;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-        }
+    &-trigger {
+        min-width:10em;
+
+        @include differentSizeSelect();
     }
+
+    &-popover {
+        /*display:flex;*/
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 4px;
+        background: #fff;
+        z-index:1;
+        box-shadow: 0 1px 6px fade_out(#000, 0.8);
+    }
+}
 </style>

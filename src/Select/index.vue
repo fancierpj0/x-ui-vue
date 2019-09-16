@@ -8,7 +8,7 @@
             </div>
         </div>
         <transition :name="transitionName">
-            <div :class="dropdownListClass" v-if="open">
+            <div :class="dropdownListClass" v-show="open">
                 <ul>
                     <slot></slot>
                 </ul>
@@ -18,37 +18,45 @@
 </template>
 
 <script>
-  import {UI_PREFIX} from "../constant";
+  import {UI_PREFIX,FORM_EVENTBUS,SELECT_EVENTBUS} from "../constant";
   import Icon from '../Icon'
   import ClickOutside from '../directive/click-outside';
+  import Vue from 'vue';
 
   export default {
     name: "Select"
     ,components:{Icon}
     ,directives:{ClickOutside}
-    ,model:{
-      prop:'value'
-      ,event:'change'
+    ,model:{prop:'value',event:'change'}
+    ,inject: {
+      [FORM_EVENTBUS]: { from: FORM_EVENTBUS, default: null }
+      ,field: { from: "field", default: null }
     }
-    ,props:{
-      value:{
-        type:String
-      }
+    ,props:{value:{type:String}
+      ,size: {type: String, default: "default",
+        validator(value) {return ["large", "small", "default"].indexOf(value) >= 0;}}
     }
     ,data(){
       return {
-        open:false
-      }
+        open: false
+        , error: false
+        , [SELECT_EVENTBUS]: new Vue()
+      };
+    }
+    ,provide(){
+      return {
+        [SELECT_EVENTBUS]: this[SELECT_EVENTBUS]
+      };
     }
     ,computed:{
       selectClass(){
         return `${UI_PREFIX}select`;
       }
       ,inputContainerClass(){
-        return [`${this.selectClass}-inputContainer`,{open:this.open}];
+        return [`${this.selectClass}-inputContainer`,{error: this.error, small: this.size === "small", large: this.size === "large",open:this.open}];
       }
       ,fakeInputClass(){
-        return [`${this.selectClass}-inputContainer-fakeInput`,{open:this.open}];
+        return [`${this.selectClass}-inputContainer-fakeInput`, {open: this.open, large: this.size === "large"}];
       }
       ,dropdownListClass(){
         return `${this.selectClass}-dropdownList`
@@ -57,6 +65,9 @@
         return `${UI_PREFIX}Select-dropdownList`
       }
     }
+    ,mounted() {
+      this.listenToSelectChange();
+    }
     ,methods:{
       onClick(){
         this.open = !this.open;
@@ -64,12 +75,20 @@
       ,close(){
         this.open = false;
       }
+      ,listenToSelectChange(){
+        this[SELECT_EVENTBUS].$on('select:change', (value) => {
+          this.$emit('change', value);
+          this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'change');
+          this.close();
+        });
+      }
     }
   }
 </script>
 
 <style lang="scss">
 @import '../var';
+@import '../shape';
 
 .#{$ui-prefix}Select-dropdownList-enter-active,.#{$ui-prefix}Select-dropdownList-leave-active{
     transition:all 250ms;
@@ -81,59 +100,51 @@
 
 .#{$ui-prefix}select{
     display:inline-block;
-    position:relative;
     vertical-align: center;
+    position:relative;
     user-select:none;
 
     ul {margin: 0;padding: 0;}
 
     &-inputContainer{
-        border:1px solid $border-color-light;
-        border-radius:4px;
-        padding: 5px 1em;
-        cursor: pointer;
-
-        box-shadow: 0 0 0 2px fade_out($blue, 1);
-
-        &:hover {
-            border-color: $blue;
-        }
-
-        &:focus {
-            border-color:$blue;
-            outline: none;
-        }
-
-        &.open:focus{
-            box-shadow: 0 0 0 2px fade_out($blue, 0.7);
-        }
+        @include differentSizeSelect();
 
         &-fakeInput{
-            min-width: 5em;
+            min-width: 6em;
+            text-align: initial;
+
+            span{
+                display: block;
+                margin-right:14px;
+            }
 
             svg{
+                position:absolute;
+                top:50%;
+                right:6px;
+                transform:translateY(-50%) rotate(90deg);
                 transition:all .2s linear;
-                transform:rotate(90deg);
-                margin-left:1em;
-                fill:$light-color;
-                vertical-align: middle;
+                fill:$color-light;
             }
 
             &.open svg{
-                transform:rotate(270deg);
+                transform:translateY(-50%) rotate(270deg);
             }
+
+            &.large{ svg {right: 7px;} } /* input形状的横向padding都为.5em，而只有large大小时fontSize才会变为14px，其余size都为12px，而这里的right大小等于横向padding */
         }
     }
 
 
     &-dropdownList{
         position:absolute;
+        z-index:1;
         margin-top:5px;
         width:100%;
 
         background: #fff;
         box-shadow: 0 1px 6px fade_out(#000, 0.8);
-        border-radius: $border-radius;
+        border-radius: $borderRadius;
         padding:5px 0;
 
         transform-origin: top left;

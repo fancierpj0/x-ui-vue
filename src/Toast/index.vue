@@ -80,7 +80,7 @@
     $toast-font-size: $font-size;
     $toast-line-height: $line-height;
     $toast-min-height: 40px;
-    $toast-border-radius: $border-radius;
+    $toast-border-radius: $borderRadius;
     $toast-bg: rgba(0, 0, 0, .75);
     $toast-color:#fff;
     $toast-frame-width:16px;

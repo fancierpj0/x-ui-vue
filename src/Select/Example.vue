@@ -50,7 +50,7 @@
             value: 'Canberra',
             label: 'Canberra'
           }
-        ],
+        ]
       };
     }
   }

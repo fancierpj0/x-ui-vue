@@ -5,25 +5,22 @@
 </template>
 
 <script>
-  import {UI_PREFIX} from "../constant";
+  import {UI_PREFIX,SELECT_EVENTBUS} from "../constant";
 
   export default {
     name: "Option"
+    ,inject: {
+      [SELECT_EVENTBUS]: { from: SELECT_EVENTBUS, default: null }
+    }
     ,props:{
-      value:{
-        type:String
-        ,required:true
-      }
+      value:{type:String,required:true}
     }
     ,computed:{
-      selectOptionClass(){
-        return `${UI_PREFIX}selectOption`;
-      }
+      selectOptionClass(){return `${UI_PREFIX}selectOption`;}
     }
     ,methods:{
       onClick(){
-        this.$parent.$emit('change', this.value);
-        this.$parent.open = false;
+        this[SELECT_EVENTBUS].$emit('select:change', this.value);
       }
     }
   }
@@ -33,7 +30,7 @@
 @import '../var';
 .#{$ui-prefix}selectOption{
     list-style: none;
-    text-align: left;
+    text-align: initial;
 
     padding:7px 16px;
 

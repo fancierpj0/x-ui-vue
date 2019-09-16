@@ -43,13 +43,13 @@
         <hr>
         <div>
             <p>button-group，children必须是Button组件，否则会报一个warning</p>
-            <button-group>
-                <Button icon="upload"></Button>
-                <Button icon="download" icon-position="right"></Button>
-                <Button icon="download" icon-position="right"></Button>
+            <button-group size="large">
+                <Button icon="upload" :class="'abc'"></Button>
+                <Button icon="download" icon-position="right" :class="['abc','bbb']" ></Button>
+                <Button icon="download" icon-position="right" :class="'abc'"></Button>
             </button-group>
             <br>
-            <button-group>
+            <button-group size="large">
                 <div>这是第二个button-group，会warning</div>
             </button-group>
         </div>
@@ -58,14 +58,14 @@
         <div>
             <p>inline-block，一行显示无问题</p>
             <div>
-                <button-group>
+                <button-group size="large">
                     <Button icon="upload"></Button>
                     <Button icon="download" icon-position="right"></Button>
                     <Button icon="download" icon-position="right"></Button>
                 </button-group>
-                <Button icon="loading">a</Button>
+                <Button icon="loading" size="small">a</Button>
                 <Button icon="loading" tag-type="input">input</Button>
-                <Button icon="loading" tag-type="button">button</Button>
+                <Button icon="loading" tag-type="button" size="large">button</Button>
             </div>
         </div>
     </div>

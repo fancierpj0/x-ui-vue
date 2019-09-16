@@ -96,7 +96,7 @@
             height: 20px;
             padding: 0 8px;
             border: 1px solid $grey;
-            border-radius: $border-radius;
+            border-radius: $borderRadius;
             margin: 0 4px;
 
             cursor: pointer;
@@ -112,7 +112,7 @@
             display: inline-flex;justify-content: center;align-items: center;
 
             font-size:12px;
-            color:$light-color;
+            color:$color-light;
             height: $height;
             margin: 0 4px;
 
@@ -122,7 +122,7 @@
                 color:$blue;
             }
             &.disabled {
-                color: $disabled-text-color;
+                color: $color-disabled;
                 cursor: not-allowed;
                 svg {fill: darken($grey, 30%)}
             }

@@ -71,7 +71,7 @@
     @import "../var";
     .#{$ui-prefix}collapse{
         border:1px solid $red;
-        border-radius:$border-radius;
+        border-radius:$borderRadius;
         &:not(.isLastItemOpen){
             border-bottom:none;
         }
