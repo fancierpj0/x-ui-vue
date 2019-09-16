@@ -139,6 +139,7 @@
     &-dropdownList{
         position:absolute;
         z-index:1;
+        top:100%;
         margin-top:5px;
         min-width:100%;
         white-space: nowrap;
