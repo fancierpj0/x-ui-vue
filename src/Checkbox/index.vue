@@ -27,6 +27,7 @@ export default {
     ,[FORM_EVENTBUS]: { from: FORM_EVENTBUS, default: null }
     ,name: { from: "name", default: null }
     ,field: { from: "field", default: null }
+    ,checkboxGroupSize:{from:"checkboxGroupSize",default:null}
   }
   ,model: {
     prop: "checked"
@@ -37,6 +38,7 @@ export default {
     ,value: { type: [String, Number] }
     ,disabled: { type: Boolean, default: false }
     ,readonly: { type: Boolean, default: false }
+    ,size:{type:String,default:'default', validator(value) {return ["large","default", "small"].indexOf(value) >= 0;}}
   }
   ,data() {
     return {
@@ -46,7 +48,7 @@ export default {
   }
   ,computed: {
     checkboxWrapperClass() {
-      return [`${UI_PREFIX}checkboxWrapper`, { error: this.error }];
+      return [`${UI_PREFIX}checkboxWrapper`, {error: this.error, small: (this.checkboxGroupSize || this.size) === "small", large: (this.checkboxGroupSize || this.size) === "large"}];
     }
     ,checkboxContainerClass() {
       return [`${UI_PREFIX}checkboxWrapper-checkboxContainer`];
@@ -96,11 +98,19 @@ export default {
 $checkboxDiameter:14px;
 $checkboxBorderWidth:1px;
 
+//large
+$checkboxDiameter-large:16px;
+
+//small
+$checkboxDiameter-small:12px;
+
 .#{$ui-prefix}checkboxWrapper {
   display: inline-flex;
   align-items: center;
   margin-right: 8px;
   cursor: pointer;
+
+  font-size:12px;
 
   &:hover &-checkboxContainer-fakeCheckbox:not(.checked){
     border-color:$borderColor-hover;
@@ -161,5 +171,28 @@ $checkboxBorderWidth:1px;
     margin:0 2px;
   }
 
+  &.large {
+    font-size:14px;
+
+    .#{$ui-prefix}checkboxWrapper-checkboxContainer-fakeCheckbox{
+      width: $checkboxDiameter-large;
+      height: $checkboxDiameter-large;
+      &:after{
+        width: 5px;
+        height: 9px
+      }
+    }
+  }
+
+  &.small {
+    .#{$ui-prefix}checkboxWrapper-checkboxContainer-fakeCheckbox{
+      width: $checkboxDiameter-small;
+      height: $checkboxDiameter-small;
+      &:after{
+        top: 0;
+        left: 3px
+      }
+    }
+  }
 }
 </style>

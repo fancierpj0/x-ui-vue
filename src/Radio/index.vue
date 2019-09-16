@@ -27,6 +27,7 @@ export default {
     ,[FORM_EVENTBUS]: { from: FORM_EVENTBUS, default: null }
     ,name: { from: "name", default: null }
     ,field: { from: "field", default: null }
+    ,radioGroupSize:{from:"radioGroupSize",default:null}
   }
   ,model: {
     prop: "checked"
@@ -37,6 +38,7 @@ export default {
     ,value: { type: [String, Number] }
     ,disabled: { type: Boolean, default: false }
     ,readonly: { type: Boolean, default: false }
+    ,size:{type:String,default:'default', validator(value) {return ["large","default", "small"].indexOf(value) >= 0;}}
   }
   ,data() {
     return {
@@ -46,10 +48,10 @@ export default {
   }
   ,computed: {
     radioWrapperClass() {
-      return [`${UI_PREFIX}radioWrapper`, { error: this.error }];
+      return [`${UI_PREFIX}radioWrapper`, {error: this.error, small: (this.radioGroupSize || this.size) === "small", large: (this.radioGroupSize || this.size) === "large"}];
     }
     ,radioContainerClass() {
-      return [`${UI_PREFIX}radioWrapper-radioContainer`];
+      return `${UI_PREFIX}radioWrapper-radioContainer`;
     }
     ,realRadio() {
       return `${this.radioContainerClass}-realRadio`;
@@ -99,11 +101,25 @@ $innerRadioDiameter:8px;
 $innerRadioLeft:($radioDiameter - $radioBorderWidth*2 - $innerRadioDiameter)/2;
 $innerRadioTop:$innerRadioLeft;
 
+//large
+$radioDiameter-large:16px;
+$innerRadioDiameter-large:10px;
+$innerRadioLeft-large:($radioDiameter-large - $radioBorderWidth*2 - $innerRadioDiameter-large)/2;
+$innerRadioTop-large:$innerRadioLeft-large;
+
+//small
+$radioDiameter-small:12px;
+$innerRadioDiameter-small:6px;
+$innerRadioLeft-small:($radioDiameter-small - $radioBorderWidth*2 - $innerRadioDiameter-small)/2;
+$innerRadioTop-small:$innerRadioLeft-small;
+
 .#{$ui-prefix}radioWrapper {
   display: inline-flex;
   align-items: center;
   margin-right: 8px;
   cursor: pointer;
+
+  font-size:12px;
 
   &:hover &-radioContainer-fakeRadio:not(.checked){
     border-color:$borderColor-hover;
@@ -159,8 +175,36 @@ $innerRadioTop:$innerRadioLeft;
   }
 
   svg{
+    font-size:12px;
     margin:0 2px;
   }
 
+  &.large {
+    font-size:14px;
+
+    .#{$ui-prefix}radioWrapper-radioContainer-fakeRadio{
+      width:$radioDiameter-large;
+      height:$radioDiameter-large;
+      &:after{
+        width:$innerRadioDiameter-large;
+        height:$innerRadioDiameter-large;
+        left:$innerRadioLeft-large;
+        top:$innerRadioTop-large;
+      }
+    }
+  }
+
+  &.small {
+    .#{$ui-prefix}radioWrapper-radioContainer-fakeRadio{
+      width:$radioDiameter-small;
+      height:$radioDiameter-small;
+      &:after{
+        width:$innerRadioDiameter-small;
+        height:$innerRadioDiameter-small;
+        left:$innerRadioLeft-small;
+        top:$innerRadioTop-small;
+      }
+    }
+  }
 }
 </style>

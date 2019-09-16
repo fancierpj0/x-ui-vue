@@ -36,12 +36,12 @@
       }
       ,size:{
         type:String
-        , validator(value) {return ["large", "small"].indexOf(value) >= 0;}
+        , validator(value) {return ["large","default", "small"].indexOf(value) >= 0;}
       }
     }
     ,computed:{
       onOffClass(){
-        return [`${UI_PREFIX}onOff`, {checked: this.value, loading: this.loading, large: this.size === 'large'}];
+        return [`${UI_PREFIX}onOff`, {checked: this.value, loading: this.loading, large: this.size === 'large', small: this.size === 'small'}];
       }
       ,textClass(){
         return `${UI_PREFIX}onOff-text`;
@@ -119,6 +119,32 @@ $innerOnOff-holdWidth-large:$onOff-width-large - $onOff-borderWidth*2 - $onOff-f
 $innerOnOff-left-checked-large:$onOff-width-large - $innerOnOff-width - $innerOnOff-left - $onOff-borderWidth * 2;
 $innerOnOff-left-checked-hold-large:$innerOnOff-left-checked-large - ($innerOnOff-holdWidth-large - $innerOnOff-width);
 $onOffLoading-left-checked-large:$onOffLoading-left + ($innerOnOff-left-checked-large - $innerOnOff-left);
+
+
+
+/*
+size为small时
+*/
+$onOff-width-small:28px;
+$onOff-lineHeight-small:14px;
+$onOff-Height-small:$onOff-lineHeight-small + $onOff-borderWidth*2;
+$onOff-radius-small:$onOff-Height-small/2;
+
+$innerOnOff-height-small:$onOff-lineHeight-small - 2px;
+$innerOnOff-width-small:$innerOnOff-height-small;
+$innerOnOff-borderRadius-small:$innerOnOff-height-small;
+$innerOnOff-top-small:($onOff-lineHeight-small - $innerOnOff-height-small)/2;
+$innerOnOff-left-small:$innerOnOff-top-small;
+$innerOnOff-left-checked-small:$onOff-width-small - $innerOnOff-width-small - $innerOnOff-left-small - $onOff-borderWidth*2;
+$innerOnOff-holdWidth-small:$onOff-width-small - $onOff-borderWidth*2 - $onOff-fontSize;
+$innerOnOff-left-checked-hold-small:$innerOnOff-left-checked-small - ($innerOnOff-holdWidth-small - $innerOnOff-width-small);
+
+$onOffLoading-height-small:$innerOnOff-height-small - 4px;
+$onOffLoading-width-small:$onOffLoading-height-small;
+$onOffLoading-top-small:($onOff-lineHeight-small - $onOffLoading-height-small)/2;
+$onOffLoading-left-small:$onOffLoading-top-small;
+$onOffLoading-left-checked-small:$onOffLoading-left-small + ($innerOnOff-left-checked-small - $innerOnOff-left-small);
+
 
 .#{$ui-prefix}onOff{
     box-sizing:border-box;
@@ -239,6 +265,47 @@ $onOffLoading-left-checked-large:$onOffLoading-left + ($innerOnOff-left-checked-
             }
         }
     }
+
+    &.small{
+        width: $onOff-width-small;
+        height:$onOff-Height-small;
+        line-height: $onOff-lineHeight-small;
+        border-radius: $onOff-radius-small;
+
+        &:after{
+            width: $innerOnOff-width-small;
+            height: $innerOnOff-height-small;
+            border-radius:$innerOnOff-borderRadius-small;
+            left: $innerOnOff-left-small;
+            top: $innerOnOff-top-small;
+        }
+
+        &.checked {
+            &:after{
+                left:$innerOnOff-left-checked-small;
+            }
+            &:before{
+                left:$onOffLoading-left-checked-small;
+            }
+        }
+
+        &.hold{
+            &:after{
+                width:$innerOnOff-holdWidth-small;
+            }
+            &.checked:after{
+                left:$innerOnOff-left-checked-hold-small;
+            }
+        }
+
+        &:before{
+            width: $onOffLoading-width-small;
+            height: $onOffLoading-height-small;
+            left: $onOffLoading-left-small;
+            top: $onOffLoading-top-small;
+        }
+    }
+
 }
 
 </style>

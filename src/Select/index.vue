@@ -56,7 +56,7 @@
         return [`${this.selectClass}-inputContainer`,{error: this.error, small: this.size === "small", large: this.size === "large",open:this.open}];
       }
       ,fakeInputClass(){
-        return [`${this.selectClass}-inputContainer-fakeInput`, {open: this.open, large: this.size === "large"}];
+        return [`${this.selectClass}-inputContainer-fakeInput`];
       }
       ,dropdownListClass(){
         return `${this.selectClass}-dropdownList`
@@ -126,13 +126,10 @@
                 transition:all .2s linear;
                 fill:$color-light;
             }
-
-            &.open svg{
-                transform:translateY(-50%) rotate(270deg);
-            }
-
-            &.large{ svg {right: 7px;} } /* input形状的横向padding都为.5em，而只有large大小时fontSize才会变为14px，其余size都为12px，而这里的right大小等于横向padding */
         }
+
+        &.open{ .#{$ui-prefix}select-inputContainer-fakeInput{ svg{transform:translateY(-50%) rotate(270deg);} } }
+        &.large{ .#{$ui-prefix}select-inputContainer-fakeInput{ svg{right: 7px;} } } /* input形状的横向padding都为.5em，而只有large大小时fontSize才会变为14px，其余size都为12px，而这里的right大小等于横向padding */
     }
 
 
@@ -140,14 +137,21 @@
         position:absolute;
         z-index:1;
         margin-top:5px;
-        width:100%;
+        min-width:100%;
+        white-space: nowrap;
 
         background: #fff;
         box-shadow: 0 1px 6px fade_out(#000, 0.8);
         border-radius: $borderRadius;
         padding:5px 0;
 
+        font-size:12px;
+
         transform-origin: top left;
+    }
+
+    &-inputContainer.large + &-dropdownList {
+        font-size: 14px;
     }
 }
 </style>

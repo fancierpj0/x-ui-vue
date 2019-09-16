@@ -4,6 +4,7 @@
 
         <div style="height:1em;background: #4a90e2;"></div>
 
+        <hr>
         <div>
             <p>single checkbox</p>
             <div>
@@ -12,15 +13,30 @@
             </div>
         </div>
 
+        <hr>
         <div>
             <p>group checkbox</p>
             <div>
                 <div>{{group}}</div>
                 <checkbox-group v-model="group">
-                    <Checkbox :value="0">肯德基</Checkbox>
-                    <Checkbox :value="1">麦当劳</Checkbox>
+                    <Checkbox :value="0" size="small">肯德基</Checkbox>
+                    <Checkbox :value="1" size="default">麦当劳</Checkbox>
                     <Checkbox :value="2">德克士</Checkbox>
-                    <Checkbox :value="3">汉堡王</Checkbox>
+                    <Checkbox :value="3" size="large">汉堡王</Checkbox>
+                </checkbox-group>
+            </div>
+        </div>
+
+        <hr>
+        <div>
+            <p>group checkbox</p>
+            <div>
+                <div>{{group}}</div>
+                <checkbox-group v-model="group" size="large">
+                    <Checkbox :value="0" size="small">肯德基</Checkbox>
+                    <Checkbox :value="1" size="default">麦当劳</Checkbox>
+                    <Checkbox :value="2">德克士</Checkbox>
+                    <Checkbox :value="3" size="large">汉堡王</Checkbox>
                 </checkbox-group>
             </div>
         </div>

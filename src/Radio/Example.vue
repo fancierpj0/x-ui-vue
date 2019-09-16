@@ -4,6 +4,7 @@
 
         <div style="height:1em;background: #4a90e2;"></div>
 
+        <hr>
         <div>
             <p></p>
             <div>
@@ -12,14 +13,26 @@
             </div>
         </div>
 
+
+        <hr>
+        <div>
+            <p></p>
+            <div>
+                <Radio value="0" size="large" v-model="single"><Icon name="right"/>Apple</Radio>
+                <Radio value="1" size="" v-model="single">Android</Radio>
+                <Radio value="2" size="small" v-model="single">Windows</Radio>
+            </div>
+        </div>
+
+        <hr>
         <div>
             <p></p>
             <div>
                 {{phone}}
-                <RadioGroup v-model="phone">
-                    <Radio value="0"><Icon name="right"/>Apple</Radio>
-                    <Radio value="1">Android</Radio>
-                    <Radio value="2">Windows</Radio>
+                <RadioGroup v-model="phone" size="large">
+                    <Radio value="0" ><Icon name="right"/>Apple</Radio>
+                    <Radio value="1" >Android</Radio>
+                    <Radio value="2" >Windows</Radio>
                 </RadioGroup>
             </div>
         </div>

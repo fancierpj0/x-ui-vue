@@ -15,9 +15,8 @@
       ,event:'change'
     }
     ,props:{
-      checked:{
-        type:Array
-      }
+      checked:{type:Array}
+      ,size:{type:String,default:'default', validator(value) {return ["large","default", "small"].indexOf(value) >= 0;}}
     }
     ,inject:{
       [FORM_EVENTBUS]:{from:FORM_EVENTBUS,default:null}
@@ -37,6 +36,7 @@
       return {
         [CHECKGROUP_EVENTBUS]: this[CHECKGROUP_EVENTBUS]
         ,name:`RadioGroup_${Date.now()}`
+        ,checkboxGroupSize:this.size
       }
     }
     ,mounted() {

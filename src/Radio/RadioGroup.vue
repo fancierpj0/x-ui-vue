@@ -15,10 +15,8 @@
       ,event:'change'
     }
     ,props:{
-      checked:{
-        type:[String,Number]
-        //emmm... 这不能写required，因为我们是通过v-model传递的 它识别不了
-      }
+      checked:{type:[String,Number]/*emmm... 这不能写required，因为我们是通过v-model传递的 它识别不了*/}
+      ,size:{type:String,default:'default', validator(value) {return ["large","default", "small"].indexOf(value) >= 0;}}
     }
     ,inject:{
       [FORM_EVENTBUS]:{from:FORM_EVENTBUS,default:null}
@@ -38,6 +36,7 @@
       return {
         [RADIOGROUP_EVENTBUS]: this[RADIOGROUP_EVENTBUS]
         ,name:`RadioGroup_${Date.now()}`
+        ,radioGroupSize:this.size
       }
     }
     ,mounted() {
