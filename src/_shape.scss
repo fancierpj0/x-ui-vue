@@ -66,6 +66,7 @@ $fontSize
   line-height:$lineHeight; // input的line-height并不会继承父元素的而是normal，这个值和浏览器和字体有关
   padding: $paddingV .5em;
   border: 1px solid $borderColor;
+  width:100%;
 
   text-align: initial;
 
