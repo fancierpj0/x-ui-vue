@@ -225,7 +225,7 @@ $content-wrapper-triangle-offset:7px;
   position: relative;
 
   &-contentWrapper{
-      position: fixed; //在存在滚动条的情况下，比使用fixed好
+      position: fixed;
       border: $content-wrapper-border-width solid $content-wrapper-border-color;
       border-radius: $content-wrapper-border-radius;
       filter: drop-shadow(0 1px 1px fade_out(#000, 0.8)); // box-shadow的话三角形就没有阴影了
