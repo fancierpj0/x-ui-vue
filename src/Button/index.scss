@@ -13,6 +13,9 @@
     padding-left:1em;
     padding-right:1em;
 
+    width: initial;
+    white-space: nowrap;
+
     &:focus{
       border-color:$input-borderColor;
     }
@@ -23,7 +26,6 @@
     }
   };
 
-  width: initial;
   margin:0;
   text-decoration: none;
 
