@@ -176,7 +176,8 @@
           fail && fail(xhr);
         };
         //https://developer.mozilla.org/zh-CN/docs/Web/Events/%E8%BF%9B%E5%BA%A6%E6%9D%A1
-        xhr.onprogress = (ev) => {
+        xhr.upload.onprogress = (ev) => {
+          console.log('ev.loaded / ev.total:',ev.loaded / ev.total);
           this.$emit('progress', ev.loaded / ev.total);
         };
 
