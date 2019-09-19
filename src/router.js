@@ -22,6 +22,8 @@ import RadioExample from './Radio/Example'
 import CheckboxExample from './Checkbox/Example'
 import OnOffExample from './OnOff/Example'
 import SelectExample from './Select/Example'
+import UploadExample from './Upload/Example'
+import DatepickerExample from './Datepicker/Example'
 
 
 Vue.use(Router);
@@ -52,5 +54,7 @@ export default new Router({
     ,{path: '/checkbox', name: 'checkbox', component: CheckboxExample}
     ,{path: '/onoff', name: 'onoff', component: OnOffExample}
     ,{path: '/select', name: 'select', component: SelectExample}
+    ,{path: '/upload', name: 'upload', component: UploadExample}
+    ,{path: '/datepicker', name: 'datepicker', component: DatepickerExample}
   ]
 })

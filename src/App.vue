@@ -89,6 +89,12 @@
                   <nav-item name="onoff">
                     <router-link to="/onoff">OnOff</router-link>
                   </nav-item>
+                  <nav-item name="datepicker">
+                    <router-link to="/datepicker">Datepicker</router-link>
+                  </nav-item>
+                  <nav-item name="upload">
+                    <router-link to="/upload">Upload</router-link>
+                  </nav-item>
                   <nav-item name="form">
                     <router-link to="/form">Form</router-link>
                   </nav-item>

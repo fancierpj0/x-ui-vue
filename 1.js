@@ -62,7 +62,7 @@ x.forEach((item, index) => {
 });
 const r = x.filter(item => item !== 2);
 console.log('r:',r);*/
-let i =5;
+/*let i =5;
 if(i===-1){
   console.log(1)
 }else if(i>3){
@@ -70,3 +70,9 @@ if(i===-1){
 }else if(i>4){
   console.log(3);
 }
+
+let a = {a: 1}
+let b = {b: 2}
+let c = {c: 3}
+console.log([a,b ,c ].indexOf(b));*/
+
