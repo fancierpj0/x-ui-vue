@@ -9,7 +9,7 @@
                 <div>
                     {{selectedCity1}}
                 </div>
-                <Cascader :source.sync="source1" popoverHeight="200px" :selected.sync="selectedCity1" ></Cascader>
+                <Cascader :source.sync="source1" popoverHeight="200px" v-model="selectedCity1" ></Cascader>
                 <!--{{selectedCity1}}-->
             </div>
         </div>
@@ -21,7 +21,7 @@
                 <div>
                     {{selectedCity2}}
                 </div>
-                <Cascader :source.sync="source2" :selected.sync="selectedCity2" :load-data="loadData" popoverHeight="200px" size="large"></Cascader>
+                <Cascader :source.sync="source2" v-model="selectedCity2" :load-data="loadData" popoverHeight="200px" size="large"></Cascader>
                 <!--{{selectedCity2}}-->
             </div>
         </div>
