@@ -35,3 +35,7 @@ export {default as Radio} from './Radio';
 export {default as RadioGroup} from './Radio/RadioGroup';
 export {default as Checkbox} from './Checkbox';
 export {default as CheckboxGroup} from './Checkbox/CheckboxGroup';
+export {default as Select} from './Select';
+export {default as Option} from './Select/Option';
+export {default as Upload} from './Upload';
+export {default as Datepicker} from './Datepicker';
