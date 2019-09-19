@@ -7,21 +7,32 @@
         <hr>
         <div>
             <p></p>
-            <div>
+            <div style="width:320px;">
                 {{formData}}
                 <Form @submit="onSubmit"
                     :formData="formData"
                     :rules="rules"
                 >
-                    <form-item field="selectValue">
+                    <form-item field="selectValue" label="城市" :label-width="labelWidth">
                         <Select v-model="formData.selectValue" size="large">
                             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </form-item>
 
-                    <form-item field="cascaderValue">
+                    <form-item field="cascaderValue" label="city" :label-width="labelWidth">
                         <Cascader :source.sync="cascaderSource" v-model="formData.cascaderValue" :load-data="loadData" popoverHeight="200px" size="large"></Cascader>
                     </form-item>
+
+                    <form-item field="d" label="日期" :label-width="labelWidth">
+                        <Datepicker v-model="formData.d" :scope="scope" :style="{width:'200px'}"></Datepicker>
+                    </form-item>
+
+                    <form-item field="fileList" label="avatar" :label-width="labelWidth">
+                        <Upload accept="image/*" action="http://localhost:3000/upload" name="file" v-model="formData.fileList" method="POST" :parse-response="parseResponse">
+                            <Button icon="upload">上传</Button>
+                        </Upload>
+                    </form-item>
+
                     <!--
                         ahhh123 -> errors (2) ["名字重复咯~~", "太长"]
                         会显示  名字重复咯~~
@@ -29,19 +40,19 @@
                         :rules="[{validator:validate1},{maxLength:7,message:'太长'}]"
                         :rules="{blur:[{required:true,message:'必填'},{validator:validate2}],input:[{minLength:6,message:'太短'},{maxLength:10,message:'太长'}]}"
                     -->
-                    <form-item field="username" label=""  >
+                    <form-item field="username" label="用户名" :label-width="labelWidth">
                         <Input type="text" v-model="formData.username" />
                     </form-item>
 
-                    <form-item field="password" label="">
+                    <form-item field="password" label="密码" :label-width="labelWidth">
                         <Input type="text" v-model="formData.password" size="large"/>
                     </form-item>
 
-                    <form-item field="profile" label="">
+                    <form-item field="profile" label="介绍" :label-width="labelWidth">
                         <Textarea type="text" v-model="formData.profile" size="large" />
                     </form-item>
 
-                    <form-item field="sex">
+                    <form-item field="sex" label="sex" :label-width="labelWidth">
                         <radio-group v-model="formData.sex">
                             <radio value="0">女</radio>
                             <radio value="1">男</radio>
@@ -49,7 +60,7 @@
                     </form-item>
 
 
-                    <form-item field="friends">
+                    <form-item field="friends" label="朋友们" :label-width="labelWidth">
                         {{formData.friends}}
                         <checkbox-group v-model="formData.friends">
                             <Checkbox value="0">月儿兰</Checkbox>
@@ -58,18 +69,18 @@
                         </checkbox-group>
                     </form-item>
 
-                    <form-item field="open1">
+                    <form-item field="open1" label="开关1" :label-width="labelWidth">
                         <on-off v-model="formData.open1" size="large" :loading="loading1"></on-off>
-                        <Button @click="loading1=!loading1">点击切换loading</Button>
+                        <Button @click="loading1=!loading1" size="small">点击切换loading</Button>
                     </form-item>
 
-                    <form-item field="open2">
+                    <form-item field="open2" label="开关2" :label-width="labelWidth">
                         <on-off v-model="formData.open2" on-text="开" off-text="关" :loading="loading2"></on-off>
-                        <Button @click="loading2=!loading2">点击切换loading</Button>
+                        <Button @click="loading2=!loading2" size="small">点击切换loading</Button>
                     </form-item>
 
 
-                    <form-item>
+                    <form-item :label-width="labelWidth">
                         <Button tag-type="button">提交</Button>
                     </form-item>
                 </Form>
@@ -92,6 +103,8 @@
   import Select from '../Select';
   import Option from '../Select/Option';
   import Cascader from '../Cascader';
+  import Datepicker from '../Datepicker';
+  import Upload from '../Upload';
 
   import db from '../db';
 
@@ -112,7 +125,7 @@
 
   export default {
     name: "Example"
-    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup,Button,OnOff,Select,Option,Cascader}
+    ,components:{Form,FormItem,Input,Textarea,RadioGroup,Radio,Checkbox,CheckboxGroup,Button,OnOff,Select,Option,Cascader,Datepicker,Upload}
     ,data(){
       return {
         formData:{
@@ -125,6 +138,8 @@
           ,open2:false
           ,selectValue:''
           ,cascaderValue:[]
+          ,d:new Date()
+          ,fileList:[]
         }
         ,rules:{
           username: [{validator:this.validate1,trigger:'blur'},{maxLength:7,message:'太长',trigger:'input'}]
@@ -139,6 +154,8 @@
 
           ,selectValue:[{required:true,message:'必选222',trigger:'change'}]
           ,cascaderValue:[{required:true,message:'必选333',trigger:'change'}]
+          ,d:[{required:true,message:'必选444',trigger:'change'}]
+          ,fileList:[{required:true,message:'必选555',trigger:'change'}]
         }
         ,loading1:true
         ,loading2:false
@@ -169,6 +186,8 @@
           }
         ]
         ,cascaderSource:[]
+        ,scope:[new Date(2000,1),new Date(2019,12)]
+        ,labelWidth:'80px'
       }
     }
     , created() {
@@ -210,6 +229,11 @@
         ajaxRequest(id).then(result => {
           if (result.length > 0) callback(result); //this.$emit('update:source', copy);
         });
+      }
+      ,parseResponse (response) {
+        let object = JSON.parse(response)
+        let url = `http://127.0.0.1:3000/preview/${object.id}`
+        return url
       }
     }
   }

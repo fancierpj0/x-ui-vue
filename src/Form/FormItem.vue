@@ -1,12 +1,15 @@
 <template>
     <div :class="formItemClass">
-        <slot></slot>
-        <template v-if="errorMsg">
-            <div :class="errorBoxClass">
-                <Icon name="error" :class="errorIconClass"></Icon>
-                <span :class="errorMessageClass">{{ errorMsg }}</span>
-            </div>
-        </template>
+        <label :class="labelClass" v-if="label" :style="{width:labelWidth}"><span>{{label}}</span></label>
+        <div :class="contentClass" :style="{marginLeft:labelWidth}">
+            <slot></slot>
+            <template v-if="errorMsg">
+                <div :class="errorBoxClass">
+                    <Icon name="error" :class="errorIconClass"></Icon>
+                    <span :class="errorMessageClass">{{ errorMsg }}</span>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -26,6 +29,12 @@
     }
     ,props:{
       field:{
+        type:String
+      }
+      ,label:{
+        type:String
+      }
+      ,labelWidth:{
         type:String
       }
     }
@@ -49,8 +58,14 @@
       formItemClass(){
         return `${UI_PREFIX}formItem`;
       }
+      ,labelClass(){
+        return `${this.formItemClass}-label`;
+      }
+      ,contentClass(){
+        return `${this.formItemClass}-content`;
+      }
       ,errorBoxClass(){
-        return `${this.formItemClass}-errorBox`;
+        return `${this.contentClass}-errorBox`;
       }
       ,errorIconClass(){
         return `${this.errorBoxClass}-errorIcon`;
@@ -115,25 +130,56 @@
 @import '../var';
 .#{$ui-prefix}formItem{
     margin-bottom:24px;
+    position:relative;
 
-    &-errorBox{
-        display:flex;
+    &-label{
+        box-sizing:border-box;
         align-items: center;
-        justify-content: center;
+        text-align: right;
         position:absolute;
-        width:100%;
-        line-height:24px;
-        font-size:12px;
+        top:0;
+        bottom:0;
+        left:0;
+        padding-right:12px;
+        span {
+            position:absolute;
+            top:50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            right:12px;
 
-        &-errorIcon {
-            fill: $red;
-            margin-right:.5em;
-            font-size: 12px;
-        }
-
-        &-errorMessage{
-            color: $red;
+            &:before{
+                content: "*";
+                display: inline-block;
+                margin-right: 4px;
+                color: #ed4014;
+                vertical-align: -2px;
+            }
         }
     }
+
+    &-content{
+        text-align: left;
+        &-errorBox{
+            display:flex;
+            align-items: center;
+            justify-content: start;
+            position:absolute;
+            width:100%;
+            line-height:24px;
+            font-size:12px;
+
+            &-errorIcon {
+                fill: $red;
+                margin-right:.5em;
+                font-size: 12px;
+            }
+
+            &-errorMessage{
+                color: $red;
+            }
+        }
+    }
+
 }
 </style>

@@ -32,7 +32,7 @@ class Validator {
     let rules = []
       , isMultifield = false;
 
-    if(typeof formData === 'string' || Array.isArray(formData)){ // 单个字段进行验证，array时是checkbox的值
+    if(Object.prototype.toString.call(formData)!=='[object Object]'){ // 单个字段进行验证，可能是String、Date、Array，Array时是checkbox的值
       rules = _rules;
     }else{ // 多个字段或者说整个表单进行验证
       Object.keys(_rules).forEach(fieldName => {
@@ -69,8 +69,26 @@ class Validator {
         continue;
       }
 
-      if (rule.required && isEmpty(fieldValue) ||
-        rule.minLength && !isEmpty(fieldValue) && fieldValue.length < rule.minLength ||
+      if(rule.required){
+        if(isEmpty(fieldValue)){
+          if (!returnAllErrors) return cb(rule.message);
+          errors.push(isMultifield ? [rule.key, rule.message] : rule.message);
+        }
+        else if (Array.isArray(fieldValue) && typeof fieldValue[0] === 'object' && fieldValue[0].size) { // 上传
+          let someOneIsUploading = false;
+          for(let i=0;i<fieldValue.length;++i) {
+            if (fieldValue[i].status !== 'success') {
+              someOneIsUploading = true;
+            }
+          }
+          if(someOneIsUploading){
+            if (!returnAllErrors) return cb(rule.message);
+            errors.push(isMultifield ? [rule.key, '文件还在上传中!'] : '文件还在上传中!');
+          }
+        }
+      }
+
+      if (rule.minLength && !isEmpty(fieldValue) && fieldValue.length < rule.minLength ||
         rule.maxLength && !isEmpty(fieldValue) && fieldValue.length > rule.maxLength ||
         rule.pattern && !(rule.pattern.test(fieldValue))) {
         if (!returnAllErrors) return cb(rule.message);
