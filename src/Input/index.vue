@@ -9,6 +9,7 @@
       @input="onInput"
       @blur="onBlur"
       @focus="onFocus"
+      ref="input"
     />
   </div>
 </template>
@@ -29,9 +30,10 @@ export default {
     ,event:'input'
   }
   ,props: {
-    value: {type: [String,Date]}
+    value: {type: [String,Date,Number]}
     ,disabled: {type: Boolean, default: false}
     ,readonly: {type: Boolean, default: false}
+    ,noFormEmit: {type: Boolean, default: false}
     ,size:{type: String, default: 'default'
       , validator(value) {return ["large", "small", "default"].indexOf(value) >= 0;}}
   }
@@ -51,19 +53,19 @@ export default {
   ,methods:{
     onInput(e){
       this.$emit('input', e.target.value, e);
-      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'input');
+      !this.noFormEmit && this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'input');
     }
     ,onChange(e){
       this.$emit('change', e.target.value, e);
-      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'change');
+      !this.noFormEmit && this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'change');
     }
     ,onBlur(e){
       this.$emit('blur', e.target.value, e);
-      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'blur');
+      !this.noFormEmit && this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'blur');
     }
     ,onFocus(e){
       this.$emit('focus', e.target.value, e);
-      this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'focus');
+      !this.noFormEmit && this[FORM_EVENTBUS] && this[FORM_EVENTBUS].$emit(`update:formItem`, this.field, 'focus');
     }
   }
 };
@@ -78,6 +80,7 @@ export default {
   vertical-align: middle;
   display:inline-flex;
   align-items: center;
+  width:100%;
 
   > :not(:last-child) {
     margin-right: 0.5em;

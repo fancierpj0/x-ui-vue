@@ -14,8 +14,8 @@ $borderColor-hover: #666;
 
 $box-shadow-color: rgba(0, 0, 0, 0.5);
 
-$color: #333;
-$color-light:#666;
+$color: #515A6E;
+$color-light:fade_out($color,.1);
 $color-disabled:#bbb;
 
 

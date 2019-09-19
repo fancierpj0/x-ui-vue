@@ -103,6 +103,7 @@ export default {
   vertical-align: middle;
   display:inline-flex;
   align-items: center;
+  width:100%;
 
   > :not(:last-child) {
     margin-right: 0.5em;

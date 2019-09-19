@@ -104,6 +104,7 @@
     display:inline-flex;
     align-items: center;
     position:relative;
+    width:100%;
 
     user-select:none;
 

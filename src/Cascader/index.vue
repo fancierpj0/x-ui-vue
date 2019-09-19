@@ -130,6 +130,7 @@
     display:inline-flex;
     align-items: center;
     position: relative;
+    width:100%;
 
     &-trigger {
         min-width:10em;

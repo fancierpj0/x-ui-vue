@@ -9,7 +9,7 @@
       <slot name="content" :close="close"></slot>
     </div>
 
-    <span ref="triggerWrapper" style="display: inline-block;">
+    <span ref="triggerWrapper" style="display: inline-block;" :class="triggerClass">
       <slot></slot>
     </span>
 
@@ -22,7 +22,7 @@ import {UI_PREFIX} from "../constant";
 export default {
   name: "Popover"
   ,props: {
-    popClassName: {type: String} //用户自定义弹出框类名
+    contentWrapperClassName: {type: String} //用户自定义弹出框类名
     ,position: {type: String, default: "top"
       , validator(value) {return ["top","leftTop","rightTop", "bottom","leftBottom","rightBottom","left","topLeft","bottomLeft", "right","topRight","bottomRight"].indexOf(value) >= 0;}}
     ,trigger: {type: String, default: "click"
@@ -37,7 +37,8 @@ export default {
   }
   ,computed: {
     popoverClass(){return `${UI_PREFIX}popover`;}
-    ,popoverContentWrapperClass(){return [`${this.popoverClass}-contentWrapper`,`position-${this.position}`, this.popClassName];}
+    ,popoverContentWrapperClass(){return [`${this.popoverClass}-contentWrapper`,`position-${this.position}`, this.contentWrapperClassName];}
+    ,triggerClass(){return `${this.popoverClass}-trigger`;}
     ,isHoverStyle(){return this.trigger === 'hover';}
   }
   ,mounted() {
@@ -387,6 +388,10 @@ $content-wrapper-triangle-offset:7px;
               bottom: $content-wrapper-triangle-offset;
           }
       }
+  }
+
+  &-trigger{
+    width:100%;
   }
 }
 
