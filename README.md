@@ -1,34 +1,15 @@
 # x-ui-vue
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
+演示和开发(采用vue-cli)：main.js
+```shell
 npm run serve
 ```
 
-### Compiles and minifies for production
+打包演示文档
+```shell
+
 ```
+
+打包组件库(采用vue-cli): index.js
+```shell
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
