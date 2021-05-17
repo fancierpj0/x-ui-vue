@@ -4,5 +4,5 @@ module.exports = {
       extensions: ['.js', '.vue', '.css', '.json']
     }
   },
-  publicPath:'./'
+  publicPath:'https://fancierpj0.github.io/x-ui-vue/'
 };
